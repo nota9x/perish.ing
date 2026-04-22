@@ -1,0 +1,91 @@
+---
+import { ArrowRight, Check, Copy } from '@lucide/astro';
+
+interface Props {
+	href: string;
+	icon: any;
+	title: string;
+	description: string;
+	main?: string;
+	target?: string;
+	rel?: string;
+	variant?: 'card' | 'bare' | 'stacked';
+	copyValue?: string;
+	copySuccess?: string;
+	transitionName?: string;
+}
+
+const {
+	href,
+	icon: Icon,
+	title,
+	description,
+	main,
+	target,
+	rel,
+	variant = 'card',
+	copyValue,
+	copySuccess = 'Copied to clipboard.',
+	transitionName,
+} = Astro.props;
+---
+
+<div
+	class:list={[
+		'nav-row-group',
+		copyValue && 'nav-row-group--copy-inline',
+		variant === 'stacked' && 'nav-row-group--stacked',
+	]}
+>
+	<a
+		class:list={[
+			'nav-row',
+			variant === 'bare' && 'nav-row--bare',
+			variant === 'stacked' && 'nav-row--stacked',
+			copyValue && 'nav-row--with-copy',
+		]}
+		href={href}
+		target={target}
+		rel={rel}
+	>
+		<span class="nav-row__icon" aria-hidden="true">
+			<Icon />
+		</span>
+
+		<span class="nav-row__body">
+			<span class="nav-row__title" transition:name={transitionName}>{title}</span>
+			{main && <span class="nav-row__main">{main}</span>}
+			<span class="nav-row__description">{description}</span>
+		</span>
+
+		<span class="nav-row__actions" aria-hidden="true">
+			{copyValue && <span class="nav-row__copy-placeholder"></span>}
+
+			<span class="nav-row__arrow">
+				<ArrowRight />
+			</span>
+		</span>
+	</a>
+
+	{
+		copyValue && (
+			<button
+				type="button"
+				class="nav-row-copy"
+				aria-label={`Copy ${title}`}
+				data-copy-aria={`Copy ${title}`}
+				data-copy-button
+				data-copy-value={copyValue}
+				data-copy-success={copySuccess}
+				data-copied="false"
+			>
+				<span class="nav-row-copy__icon nav-row-copy__icon--copy" aria-hidden="true">
+					<Copy />
+				</span>
+				<span class="nav-row-copy__icon nav-row-copy__icon--check" aria-hidden="true">
+					<Check />
+				</span>
+			</button>
+		)
+	}
+</div>

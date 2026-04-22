@@ -1,0 +1,18 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" rx="32" fill="#161311"/>
+  <rect x="38" y="38" width="1124" height="554" rx="24" fill="url(#bg)"/>
+  <circle cx="1032" cy="146" r="162" fill="#B2794A" fill-opacity="0.18"/>
+  <circle cx="202" cy="520" r="210" fill="#F2E6D2" fill-opacity="0.08"/>
+  <path d="M99 470C210 388 323 342 449 332C601 320 701 363 844 332C920 316 995 282 1101 215" stroke="#F2E6D2" stroke-opacity="0.22" stroke-width="2"/>
+  <text x="98" y="153" fill="#F2E6D2" font-family="Bitter, Georgia, serif" font-size="42" letter-spacing="0.24em">perish.ing</text>
+  <text x="96" y="292" fill="#FFF7EC" font-family="Bitter, Georgia, serif" font-size="112" font-weight="700">a9x</text>
+  <text x="100" y="370" fill="#E6D4C0" font-family="Bitter, Georgia, serif" font-size="40">web design, full-stack development,</text>
+  <text x="100" y="424" fill="#E6D4C0" font-family="Bitter, Georgia, serif" font-size="40">and managed hosting that feels stable.</text>
+  <text x="100" y="534" fill="#BFA68A" font-family="Bitter, Georgia, serif" font-size="28" letter-spacing="0.12em">fast sites  reliable infrastructure  thoughtful builds</text>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#241D18"/>
+      <stop offset="1" stop-color="#120F0D"/>
+    </linearGradient>
+  </defs>
+</svg>

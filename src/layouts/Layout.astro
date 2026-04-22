@@ -1,23 +1,211 @@
+---
+import '@fontsource-variable/bitter/wght.css';
+import { ClientRouter } from 'astro:transitions';
+import { makeAbsoluteUrl, siteConfig } from '../data/site';
+import '../styles/global.css';
+
+export interface Props {
+	title?: string;
+	description?: string;
+	pageType?: string;
+	ogType?: 'website' | 'profile';
+	image?: string;
+	imageAlt?: string;
+	noindex?: boolean;
+	structuredData?: Record<string, unknown> | Array<Record<string, unknown>>;
+}
+
+const {
+	title = 'a9x | Web Design, Full-Stack Development, and Managed Hosting',
+	description = siteConfig.description,
+	pageType = 'WebPage',
+	ogType = 'website',
+	image = siteConfig.defaultSocialImage,
+	imageAlt = siteConfig.defaultSocialImageAlt,
+	noindex = false,
+	structuredData,
+}: Props = Astro.props;
+
+const siteUrl = Astro.site ?? new URL(siteConfig.url);
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
+const pageTitle = title.includes(siteConfig.name) ? title : `${title} | ${siteConfig.name}`;
+const socialImageUrl = new URL(image, siteUrl).toString();
+const robotsContent = noindex
+	? 'noindex,nofollow,max-image-preview:large,max-snippet:-1,max-video-preview:-1'
+	: 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1';
+const schemaGraph = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'WebSite',
+			'@id': `${siteConfig.url}#website`,
+			url: siteConfig.url,
+			name: siteConfig.name,
+			description: siteConfig.description,
+			inLanguage: 'en',
+		},
+		{
+			'@type': 'Person',
+			'@id': `${siteConfig.url}#person`,
+			name: siteConfig.name,
+			url: siteConfig.url,
+			description: siteConfig.description,
+			email: `mailto:${siteConfig.email}`,
+			jobTitle: 'Web designer, full-stack developer, and managed hosting specialist',
+			knowsAbout: [...siteConfig.expertise],
+			sameAs: [...siteConfig.sameAs],
+		},
+		{
+			'@type': pageType,
+			'@id': `${canonicalUrl}#webpage`,
+			url: canonicalUrl,
+			name: pageTitle,
+			description,
+			inLanguage: 'en',
+			isPartOf: {
+				'@id': `${siteConfig.url}#website`,
+			},
+			about: {
+				'@id': `${siteConfig.url}#person`,
+			},
+			primaryImageOfPage: {
+				'@type': 'ImageObject',
+				url: socialImageUrl,
+			},
+		},
+		...(Array.isArray(structuredData) ? structuredData : structuredData ? [structuredData] : []),
+	],
+};
+---
+
 <!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={description} />
+		<meta name="robots" content={robotsContent} />
+		<meta name="googlebot" content={robotsContent} />
+		<meta name="author" content={siteConfig.name} />
+		<meta name="referrer" content="strict-origin-when-cross-origin" />
+		<meta name="theme-color" content="#161311" />
+		<link rel="canonical" href={canonicalUrl} />
+		<link rel="sitemap" href={makeAbsoluteUrl('/sitemap-index.xml')} />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<link rel="me" href={siteConfig.sameAs[0]} />
+		<meta property="og:locale" content={siteConfig.locale} />
+		<meta property="og:site_name" content={siteConfig.name} />
+		<meta property="og:type" content={ogType} />
+		<meta property="og:title" content={pageTitle} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonicalUrl} />
+		<meta property="og:image" content={socialImageUrl} />
+		<meta property="og:image:alt" content={imageAlt} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={pageTitle} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={socialImageUrl} />
+		<meta name="twitter:image:alt" content={imageAlt} />
+		<title>{pageTitle}</title>
+		<script type="application/ld+json" is:inline set:html={JSON.stringify(schemaGraph)} />
+		<ClientRouter fallback="animate" />
 	</head>
 	<body>
-		<slot />
+		<div class="site-shell">
+			<main class="site-main" id="content">
+				<slot />
+			</main>
+
+			<p class="sr-only" aria-live="polite" data-copy-status></p>
+		</div>
+
+		<script>
+			type CopyWindow = Window & {
+				__a9xCopyBound?: boolean;
+			};
+
+			const copyWindow = window as CopyWindow;
+			const resetTimers = new WeakMap<HTMLButtonElement, number>();
+
+			const setCopyStatus = (message: string) => {
+				const status = document.querySelector<HTMLElement>('[data-copy-status]');
+
+				if (status) {
+					status.textContent = message;
+				}
+			};
+
+			const focusCurrentPage = () => {
+				const page = document.querySelector<HTMLElement>('[data-page]');
+				page?.focus();
+			};
+
+			const restoreCopyButton = (button: HTMLButtonElement) => {
+				button.dataset.copied = 'false';
+				button.setAttribute('aria-label', button.dataset.copyAria ?? 'Copy');
+			};
+
+			const handleCopy = async (button: HTMLButtonElement) => {
+				const copyValue = button.dataset.copyValue;
+
+				if (!copyValue) {
+					return;
+				}
+
+				try {
+					await navigator.clipboard.writeText(copyValue);
+					const successMessage = button.dataset.copySuccess ?? 'Copied to clipboard.';
+
+					button.dataset.copied = 'true';
+					button.setAttribute('aria-label', 'Copied');
+
+					setCopyStatus(successMessage);
+
+					const existingTimer = resetTimers.get(button);
+
+					if (existingTimer) {
+						window.clearTimeout(existingTimer);
+					}
+
+					const nextTimer = window.setTimeout(() => {
+						restoreCopyButton(button);
+						resetTimers.delete(button);
+					}, 2200);
+
+					resetTimers.set(button, nextTimer);
+				} catch {
+					setCopyStatus('Copy failed. Open the profile link instead.');
+				}
+			};
+
+			if (!copyWindow.__a9xCopyBound) {
+				document.addEventListener('click', (event) => {
+					const target = event.target;
+
+					if (!(target instanceof Element)) {
+						return;
+					}
+
+					const button = target.closest<HTMLButtonElement>('[data-copy-button]');
+
+					if (!button) {
+						return;
+					}
+
+					event.preventDefault();
+					event.stopPropagation();
+					void handleCopy(button);
+				});
+
+				document.addEventListener('astro:page-load', focusCurrentPage);
+				copyWindow.__a9xCopyBound = true;
+			}
+
+			focusCurrentPage();
+		</script>
 	</body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>

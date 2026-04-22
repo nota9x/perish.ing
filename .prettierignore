@@ -1,0 +1,5 @@
+# Ignore dependencies and generated artifacts:
+node_modules
+.astro
+dist
+.wrangler

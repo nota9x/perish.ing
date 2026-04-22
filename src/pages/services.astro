@@ -1,0 +1,108 @@
+---
+import { LayoutPanelTop, Server } from '@lucide/astro';
+import { slide } from 'astro:transitions';
+import BackRow from '../components/BackRow.astro';
+import { siteConfig } from '../data/site';
+import Layout from '../layouts/Layout.astro';
+
+export const prerender = true;
+
+const structuredData = [
+	{
+		'@type': 'OfferCatalog',
+		'@id': `${siteConfig.url}/services/#catalog`,
+		name: 'a9x service catalog',
+		url: `${siteConfig.url}/services/`,
+		itemListElement: [
+			{
+				'@type': 'Offer',
+				itemOffered: {
+					'@type': 'Service',
+					name: 'Managed hosting',
+					description:
+						'Provisioning, hardening, deployment setup, DNS, CDN, uptime, backups, and migrations for dependable apps.',
+				},
+			},
+			{
+				'@type': 'Offer',
+				itemOffered: {
+					'@type': 'Service',
+					name: 'Web design and development',
+					description:
+						'Fast websites and full-stack apps with strong frontend direction, backend systems, deployment, and performance work.',
+				},
+			},
+		],
+	},
+];
+---
+
+<Layout
+	title="Services | a9x"
+	description="Explore a9x services for web design, full-stack development, managed hosting, infrastructure hardening, DNS, CDN, backups, and migrations."
+	pageType="CollectionPage"
+	structuredData={structuredData}
+>
+	<article class="page page--interior" transition:name="page" transition:animate={slide({ duration: '0.28s' })} tabindex="-1" data-page>
+		<div class="page-header">
+			<h1 class="page-title" transition:name="services-title">services</h1>
+			<p class="page-subtitle">things i build and support</p>
+		</div>
+
+		<section class="service-layout" aria-label="Service offerings">
+			<div class="service-intro">
+				<p class="service-intro__label">current focus</p>
+				<p class="service-intro__text">
+					i help teams ship websites and apps that feel quick, stable, and easy to trust.
+				</p>
+			</div>
+
+			<div class="service-panel">
+				<p class="service-panel__note">available services</p>
+
+				<div class="service-list">
+					<article class="service-card">
+						<span class="service-card__icon" aria-hidden="true">
+							<Server />
+						</span>
+						<div class="service-card__body">
+							<h2 class="service-card__title">managed hosting</h2>
+							<p class="service-card__copy">
+								i offer managed hosting and infrastructure support with 5+ years of
+								hands-on experience across digitalocean, cloudflare, gcp, debian, and
+								related linux tooling.
+							</p>
+							<p class="service-card__copy">
+								that includes provisioning, hardening, deployment setup, dns and cdn
+								configuration, uptime work, backups, and migrations for apps that need
+								to stay fast and dependable.
+							</p>
+						</div>
+					</article>
+
+					<article class="service-card">
+						<span class="service-card__icon" aria-hidden="true">
+							<LayoutPanelTop />
+						</span>
+						<div class="service-card__body">
+							<h2 class="service-card__title">web design</h2>
+							<p class="service-card__copy">
+								i have lots of experience building fast, native-feeling websites, and
+								i prioritize speed, security, and clean execution from the start.
+							</p>
+							<p class="service-card__copy">
+								i can design and build full-stack apps end to end, from frontend
+								direction and interaction design to backend systems, deployment, and
+								the details that make the whole product feel sharp.
+							</p>
+						</div>
+					</article>
+				</div>
+			</div>
+		</section>
+
+		<footer class="page-footer">
+			<BackRow href="/" label="back" />
+		</footer>
+	</article>
+</Layout>

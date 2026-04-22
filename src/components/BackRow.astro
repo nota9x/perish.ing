@@ -1,0 +1,20 @@
+---
+import { ArrowLeft } from '@lucide/astro';
+
+interface Props {
+	href?: string;
+	label?: string;
+}
+
+const {
+	href = '/',
+	label = 'back',
+} = Astro.props;
+---
+
+<a class="back-row" href={href}>
+	<span class="back-row__icon" aria-hidden="true">
+		<ArrowLeft />
+	</span>
+	<span>{label}</span>
+</a>
