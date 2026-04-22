@@ -288,8 +288,5 @@ export const POST: APIRoute = async ({ request }) => {
     );
   }
 
-  return jsonResponse(
-    { message: "sent! i'll get back to you soon." },
-    200,
-  );
+  return jsonResponse({ message: "sent! i'll get back to you soon." }, 200);
 };

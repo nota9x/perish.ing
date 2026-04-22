@@ -13,11 +13,11 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^13.1.10",
+    "@astrojs/cloudflare": "^13.2.0",
     "@astrojs/sitemap": "^3.7.2",
     "@fontsource-variable/bitter": "^5.2.10",
     "@lucide/astro": "^1.8.0",
-    "astro": "^6.1.8"
+    "astro": "^6.1.9"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.8",
