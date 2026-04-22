@@ -1,6 +1,6 @@
 {
   "main": "@astrojs/cloudflare/entrypoints/server",
-  "name": "second-spectrum",
+  "name": "perishing",
   "compatibility_date": "2026-04-22",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": {
