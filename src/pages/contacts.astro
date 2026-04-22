@@ -2,6 +2,7 @@
 import { Mail, MessageSquare } from '@lucide/astro';
 import { slide } from 'astro:transitions';
 import BackRow from '../components/BackRow.astro';
+import ContactForm from '../components/ContactForm.astro';
 import Layout from '../layouts/Layout.astro';
 import NavRow from '../components/NavRow.astro';
 import { siteConfig } from '../data/site';
@@ -21,7 +22,7 @@ const structuredData = [
 ---
 
 <Layout
-	title="Contact | a9x"
+	title="contact | a9x"
 	description="Contact a9x by email or Discord about web design, full-stack development, managed hosting, and infrastructure support."
 	pageType="ContactPage"
 	structuredData={structuredData}
@@ -31,6 +32,8 @@ const structuredData = [
 			<h1 class="page-title" transition:name="contacts-title">contacts</h1>
 			<p class="page-subtitle">you can reach me here</p>
 		</div>
+
+		<ContactForm />
 
 		<section class="contact-layout" aria-label="Contact methods">
 			<div class="contact-intro">

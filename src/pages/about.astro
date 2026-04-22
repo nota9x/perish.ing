@@ -1,0 +1,262 @@
+---
+import { Globe, Eye, Compass, Terminal } from "@lucide/astro";
+import { slide } from "astro:transitions";
+import BackRow from "../components/BackRow.astro";
+import { siteConfig } from "../data/site";
+import Layout from "../layouts/Layout.astro";
+
+export const prerender = true;
+
+const structuredData = [
+  {
+    "@type": "AboutPage",
+    "@id": `${siteConfig.url}/about/#about`,
+    url: `${siteConfig.url}/about/`,
+    name: "About a9x",
+    description:
+      "A personal look at how a9x sees the world, what catches their attention, and how they spend their time.",
+    mainEntity: {
+      "@id": `${siteConfig.url}#person`,
+    },
+  },
+];
+---
+
+<Layout
+  title="about | a9x"
+  description="A personal look at how a9x sees the world, what catches their attention, and how they spend their time."
+  pageType="AboutPage"
+  ogType="profile"
+  structuredData={structuredData}
+>
+  <article
+    class="page page--interior"
+    transition:name="page"
+    transition:animate={slide({ duration: "0.28s" })}
+    tabindex="-1"
+    data-page
+  >
+    <div class="page-header">
+      <h1 class="page-title" transition:name="about-title">about</h1>
+      <p class="page-subtitle">a little about how i see things</p>
+    </div>
+
+    <p class="about-opener" aria-hidden="true">
+      this is probably the most honest page on this site.
+    </p>
+
+    <!-- Hero Quote -->
+    <div class="about-hero-quote" aria-label="Opening quote">
+      <div class="about-hero-quote__mark" aria-hidden="true">&ldquo;</div>
+      <blockquote class="about-hero-quote__text">
+        Even after all this time, the sun never says to the earth &lsquo;you owe
+        me.&rsquo; Look what happens with a love like that — it lights the whole
+        sky.
+      </blockquote>
+      <cite class="about-hero-quote__attribution">— Hafiz</cite>
+    </div>
+
+    <!-- Section 1: How I See the World -->
+    <section class="about-section" aria-label="How I see the world">
+      <div class="about-section__header">
+        <span class="about-section__icon" aria-hidden="true"><Globe /></span>
+        <h2 class="about-section__title">how i see the world</h2>
+      </div>
+
+      <div class="about-divider" aria-hidden="true">
+        <span class="about-divider__line"></span>
+      </div>
+
+      <div class="about-section__body">
+        <p>
+          i grew up here in the united states, and i've watched enough to know
+          we don't always live up to what we tell ourselves we are. there's a
+          lot that's broken — not just here, but everywhere. systems that forget
+          the people inside them, conversations turning into shouting matches
+          before anyone listens.
+        </p>
+        <p>
+          i've thought about it a lot, and i keep coming back to the same place:
+          the only thing that has ever actually fixed anything in practice is
+          when someone decides to understand someone else first.
+        </p>
+
+        <div class="about-callout">
+          <span class="about-callout__bar" aria-hidden="true"></span>
+          <p class="about-callout__text">
+            not agreement. not compromise. just… seeing another person clearly,
+            even when you disagree with everything they stand for. that changes
+            something.
+          </p>
+        </div>
+
+        <p>
+          i don't think unity means pretending things are fine. i think it means
+          caring enough to show up when it's hard. empathy isn't softness. it
+          takes more out of you than anger ever does, but it's the only thing
+          i've seen actually move the needle.
+        </p>
+        <p>
+          so that's my baseline. the world is messy and full of contradictions,
+          and i still choose to believe people are worth it. not because i'm
+          optimistic, but because what's the alternative?
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 2: What Always Catches My Attention -->
+    <section class="about-section" aria-label="What catches my attention">
+      <div class="about-section__header">
+        <span class="about-section__icon" aria-hidden="true"><Eye /></span>
+        <h2 class="about-section__title">what always catches my attention</h2>
+      </div>
+
+      <div class="about-divider" aria-hidden="true">
+        <span class="about-divider__line"></span>
+      </div>
+
+      <div class="about-section__body">
+        <p>
+          there's this thing that happens whenever i hear sirens. i don't just
+          hear them — i notice them. i'll stop mid-sentence, look toward the
+          sound, and somewhere in the back of my mind i'm already thinking about
+          where they're headed and what happened. a structure fire? a medical
+          call? someone just having the worst day of their life?
+        </p>
+        <p>
+          i've been like that for as long as i can remember. something about
+          public safety, about the people who drive toward the thing everyone
+          else runs from, has always stuck with me. not in a hero-worship kind
+          of way. more like — there are people out there right now, at 3am,
+          making split-second decisions that change someone's entire future. and
+          most of us just sleep through it.
+        </p>
+
+        <div class="about-inline-quote">
+          <p>
+            i think about that a lot. the weight of the things that happen while
+            the rest of the world isn't watching.
+          </p>
+        </div>
+
+        <p>
+          aviation hits me in a similar way, but for completely different
+          reasons. there's a moment right after takeoff — the wheels leave the
+          ground, the noise changes, and everything below you gets small really
+          fast. it's the closest thing to a reset button i've found. you're not
+          in any city or any country. you're just… up there. it always makes the
+          problems on the ground feel like they have edges, like they're
+          containable. and for some reason that's incredibly calming.
+        </p>
+        <p>
+          i can sit at a window seat and watch approach patterns for hours and
+          not get bored. the way a plane turns final, lines up with a runway
+          from miles out, and just commits. there's something honest about it.
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 3: What I Spend My Time Doing -->
+    <section class="about-section" aria-label="What I spend my time doing">
+      <div class="about-section__header">
+        <span class="about-section__icon" aria-hidden="true"><Compass /></span>
+        <h2 class="about-section__title">what i spend my time doing</h2>
+      </div>
+
+      <div class="about-divider" aria-hidden="true">
+        <span class="about-divider__line"></span>
+      </div>
+
+      <div class="about-section__body">
+        <p>
+          some weekends i'll drive out to places most people pretend don't
+          exist. abandoned buildings, old factories, overgrown lots that used to
+          be something. urbex — urban exploring — is hard to explain to people
+          who haven't done it. it's not about the danger or the trespassing or
+          the aesthetic instagram shots.
+        </p>
+        <p>
+          it's about standing in a room where hundreds of people used to work or
+          live or learn, and now it's just peeling paint and silence. there's a
+          kind of honesty in decay. nothing is performing for you. it's just…
+          what's left when everything else moves on.
+        </p>
+
+        <div class="about-callout">
+          <span class="about-callout__bar" aria-hidden="true"></span>
+          <p class="about-callout__text">
+            i think that's why i keep going back. it reminds me that nothing is
+            permanent, and that's not sad — it's just true.
+          </p>
+        </div>
+
+        <p>
+          the rest of the time, honestly, it's pretty simple. i like being
+          around my friends. not doing anything specific — just existing in the
+          same space. driving around at night with the windows down. sitting in
+          someone's kitchen talking about something that doesn't matter at all
+          and laughing until it hurts. the kind of time that doesn't make it
+          into any story because nothing "happens," but it's the stuff i'd
+          actually miss.
+        </p>
+        <p>
+          i have this constant pull to go see things. not tourist destinations —
+          just places. a road i haven't driven. a part of a city i've never
+          walked through. i don't even need a reason. the point is just to go
+          and be somewhere i haven't been, and let whatever's there surprise me.
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 4: The Quiet Part -->
+    <section class="about-section" aria-label="Skills and tools">
+      <div class="about-section__header">
+        <span class="about-section__icon" aria-hidden="true"><Terminal /></span>
+        <h2 class="about-section__title">
+          the same curiosity, different place
+        </h2>
+      </div>
+
+      <div class="about-divider" aria-hidden="true">
+        <span class="about-divider__line"></span>
+      </div>
+
+      <div class="about-section__body">
+        <p>
+          there's a part of my life that's a lot less poetic and a lot more
+          "staring at a screen at 4am wondering why a function that worked five
+          minutes ago suddenly doesn't." i write code. have for years. i'm good
+          at it in the way where i don't really think about it anymore — it's
+          just how i build things.
+        </p>
+        <p>
+          and somewhere along the way, i got deep into the AI tooling side of
+          things. not the hype cycle, not the takes on twitter. the actual
+          practical stuff — using these tools to move faster, build better,
+          solve problems i wouldn't have had the bandwidth for otherwise. it's
+          changed how i work more than anything else in the last few years.
+        </p>
+
+        <div class="about-inline-quote">
+          <p>
+            but that's just what i do. it's not who i am. if you took the code
+            away, i'd still be the same person staring at airplanes and
+            exploring abandoned buildings.
+          </p>
+        </div>
+
+        <p>
+          i think the reason i even mention it is because it connects to
+          everything else. the curiosity. the drive to understand systems —
+          whether that's a web stack, an emergency response protocol, or why a
+          building was left to rot. it's all the same muscle. i just want to
+          know how things work, and then i want to make them work better.
+        </p>
+      </div>
+    </section>
+
+    <footer class="page-footer">
+      <BackRow href="/" label="back" />
+    </footer>
+  </article>
+</Layout>

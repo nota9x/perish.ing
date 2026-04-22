@@ -1,65 +1,79 @@
 ---
-import { Briefcase, MessageCircle } from '@lucide/astro';
-import { slide } from 'astro:transitions';
-import { siteConfig } from '../data/site';
-import Layout from '../layouts/Layout.astro';
-import NavRow from '../components/NavRow.astro';
+import { Briefcase, MessageCircle, User } from "@lucide/astro";
+import { slide } from "astro:transitions";
+import { siteConfig } from "../data/site";
+import Layout from "../layouts/Layout.astro";
+import NavRow from "../components/NavRow.astro";
 
 export const prerender = true;
 
 const structuredData = [
-	{
-		'@type': 'ProfessionalService',
-		'@id': `${siteConfig.url}#service`,
-		name: siteConfig.name,
-		url: siteConfig.url,
-		description: siteConfig.description,
-		email: `mailto:${siteConfig.email}`,
-		areaServed: 'Worldwide',
-		serviceType: [
-			'Web design',
-			'Full-stack development',
-			'Managed hosting',
-			'Infrastructure support',
-		],
-		provider: {
-			'@id': `${siteConfig.url}#person`,
-		},
-	},
+  {
+    "@type": "ProfessionalService",
+    "@id": `${siteConfig.url}#service`,
+    name: siteConfig.name,
+    url: siteConfig.url,
+    description: siteConfig.description,
+    email: `mailto:${siteConfig.email}`,
+    areaServed: "Worldwide",
+    serviceType: [
+      "Web design",
+      "Full-stack development",
+      "Managed hosting",
+      "Infrastructure support",
+    ],
+    provider: {
+      "@id": `${siteConfig.url}#person`,
+    },
+  },
 ];
 ---
 
 <Layout
-	title="a9x | Web Design, Full-Stack Development, and Managed Hosting"
-	description="a9x designs and builds fast websites, full-stack apps, and dependable managed hosting infrastructure from perish.ing."
-	structuredData={structuredData}
+  title="a9x"
+  description="a9x designs and builds fast websites, full-stack apps, and dependable managed hosting infrastructure from perish.ing."
+  structuredData={structuredData}
 >
-	<article class="page page--home" transition:name="page" transition:animate={slide({ duration: '0.28s' })} tabindex="-1" data-page>
-		<div class="home-stack">
-			<div class="home-copy">
-				<p class="home-intro">hey!</p>
-				<h1 class="home-title">i&apos;m a9x</h1>
-				<p class="home-question">what are you looking for?</p>
-			</div>
+  <article
+    class="page page--home"
+    transition:name="page"
+    transition:animate={slide({ duration: "0.28s" })}
+    tabindex="-1"
+    data-page
+  >
+    <div class="home-stack">
+      <div class="home-copy">
+        <p class="home-intro">hey!</p>
+        <h1 class="home-title">i&apos;m a9x</h1>
+        <p class="home-question">whatcha looking for?</p>
+      </div>
 
-			<nav class="row-stack home-nav" aria-label="Primary">
-				<NavRow
-					href="/contacts"
-					icon={MessageCircle}
-					title="contacts"
-					description="ways to reach me across the internet"
-					variant="bare"
-					transitionName="contacts-title"
-				/>
-				<NavRow
-					href="/services"
-					icon={Briefcase}
-					title="services"
-					description="things i build and offer"
-					variant="bare"
-					transitionName="services-title"
-				/>
-			</nav>
-		</div>
-	</article>
+      <nav class="row-stack home-nav" aria-label="Primary">
+        <NavRow
+          href="/about"
+          icon={User}
+          title="about"
+          description="a little about how i see things"
+          variant="bare"
+          transitionName="about-title"
+        />
+        <NavRow
+          href="/contacts"
+          icon={MessageCircle}
+          title="contacts"
+          description="ways to reach me across the internet"
+          variant="bare"
+          transitionName="contacts-title"
+        />
+        <NavRow
+          href="/services"
+          icon={Briefcase}
+          title="services"
+          description="things i build and offer"
+          variant="bare"
+          transitionName="services-title"
+        />
+      </nav>
+    </div>
+  </article>
 </Layout>
