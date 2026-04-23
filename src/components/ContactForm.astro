@@ -2,8 +2,6 @@
 import { Send } from '@lucide/astro';
 import { PUBLIC_TURNSTILE_SITE_KEY } from 'astro:env/client';
 
-// Use the provided key, or fallback to the Turnstile dummy "always passes" key for development/failsafe
-const turnstileSiteKey = PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000BB';
 ---
 
 <section class="contact-layout contact-form-section" aria-labelledby="contact-form-title">
@@ -18,7 +16,7 @@ const turnstileSiteKey = PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000BB'
 	<div class="contact-panel contact-form-panel">
 		<p class="contact-panel__note" id="contact-form-title">name and message are required</p>
 
-		<form class="contact-form" action="/api/contact" method="POST" data-contact-form data-site-key={turnstileSiteKey}>
+		<form class="contact-form" action="/api/contact" method="POST" data-contact-form data-site-key={PUBLIC_TURNSTILE_SITE_KEY}>
 			<fieldset class="contact-form__fieldset" data-form-fieldset>
 				<div class="contact-form__grid">
 					<label class="contact-form__field">
