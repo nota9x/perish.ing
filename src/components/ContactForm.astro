@@ -104,6 +104,8 @@ const turnstileSiteKey = PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000BB'
 			},
 		) => string;
 		execute: (target: HTMLElement | string) => void;
+		getResponse: (widgetId?: string) => string;
+		isExpired: (widgetId?: string) => boolean;
 		reset: (widgetId?: string) => void;
 	};
 
@@ -117,6 +119,15 @@ const turnstileSiteKey = PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000BB'
 	const turnstileScriptId = 'cf-turnstile-script';
 	const turnstileScriptSrc = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
 	type ContactFormState = 'idle' | 'pending' | 'success' | 'error';
+	const turnstileRequestTimeoutMs = 12000;
+	const pendingTurnstileRequests = new WeakMap<
+		HTMLFormElement,
+		{
+			resolve: (token: string) => void;
+			reject: (error: Error) => void;
+			timeoutId: number;
+		}
+	>();
 
 	const setStatus = (
 		form: HTMLFormElement,
@@ -214,13 +225,75 @@ const turnstileSiteKey = PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000BB'
 		return contactFormWindow.__turnstileLoader;
 	};
 
-	const submitContactForm = async (form: HTMLFormElement) => {
-		// Read the token directly from the DOM input rather than via FormData.
-		// FormData silently omits controls that belong to a disabled <fieldset>,
-		// and setSubmittingState() disables the fieldset before this function runs,
-		// which would make turnstileToken appear empty and trigger a false error.
+	const settlePendingTurnstileRequest = (
+		form: HTMLFormElement,
+		callback: (pendingRequest: {
+			resolve: (token: string) => void;
+			reject: (error: Error) => void;
+			timeoutId: number;
+		}) => void,
+	) => {
+		const pendingRequest = pendingTurnstileRequests.get(form);
+
+		if (!pendingRequest) {
+			return;
+		}
+
+		window.clearTimeout(pendingRequest.timeoutId);
+		pendingTurnstileRequests.delete(form);
+		callback(pendingRequest);
+	};
+
+	const requestTurnstileToken = async (form: HTMLFormElement) => {
 		const tokenInput = form.querySelector<HTMLInputElement>('[data-turnstile-token]');
-		const turnstileToken = (tokenInput?.value ?? '').trim();
+		const widgetId = form.dataset.turnstileWidgetId;
+		const turnstile = contactFormWindow.turnstile;
+
+		if (!tokenInput || !widgetId || !turnstile) {
+			throw new Error('couldn\'t prepare verification. refresh and try.');
+		}
+
+		tokenInput.value = '';
+		turnstile.reset(widgetId);
+		form.dataset.turnstileAwaiting = 'true';
+
+		const tokenPromise = new Promise<string>((resolve, reject) => {
+			const timeoutId = window.setTimeout(() => {
+				pendingTurnstileRequests.delete(form);
+				reject(new Error('verification timed out. try sending again.'));
+			}, turnstileRequestTimeoutMs);
+
+			pendingTurnstileRequests.set(form, { resolve, reject, timeoutId });
+		});
+
+		try {
+			turnstile.execute(widgetId);
+			return await tokenPromise;
+		} catch (error) {
+			settlePendingTurnstileRequest(form, ({ reject }) => {
+				reject(
+					error instanceof Error
+						? error
+						: new Error('couldn\'t start verification. try again.'),
+				);
+			});
+			throw error;
+		}
+	};
+
+	const submitContactForm = async (
+		form: HTMLFormElement,
+		turnstileTokenFromChallenge?: string,
+	) => {
+		const tokenInput = form.querySelector<HTMLInputElement>('[data-turnstile-token]');
+		const widgetId = form.dataset.turnstileWidgetId;
+		const turnstile = contactFormWindow.turnstile;
+		const turnstileToken = (
+			turnstileTokenFromChallenge ??
+			turnstile?.getResponse(widgetId) ??
+			tokenInput?.value ??
+			''
+		).trim();
 
 		if (!turnstileToken) {
 			form.dataset.turnstileAwaiting = 'false';
@@ -290,6 +363,10 @@ const turnstileSiteKey = PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000BB'
 			tokenInput.value = '';
 		}
 
+		settlePendingTurnstileRequest(form, ({ reject }) => {
+			reject(new Error('verification was interrupted. try again.'));
+		});
+
 		if (contactFormWindow.turnstile && widgetId) {
 			contactFormWindow.turnstile.reset(widgetId);
 		}
@@ -317,12 +394,19 @@ const turnstileSiteKey = PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000BB'
 				execution: 'execute',
 				appearance: 'interaction-only',
 				callback: (token) => {
-					tokenInput.value = token;
+					const resolvedToken = (
+						token || turnstile.getResponse(widgetId) || ''
+					).trim();
+					tokenInput.value = resolvedToken;
+					form.dataset.turnstileAwaiting = 'false';
+					settlePendingTurnstileRequest(form, ({ resolve, reject }) => {
+						if (!resolvedToken) {
+							reject(new Error('verification incomplete. try again.'));
+							return;
+						}
 
-					if (form.dataset.turnstileAwaiting === 'true') {
-						void submitContactForm(form);
-						return;
-					}
+						resolve(resolvedToken);
+					});
 
 					if (form.dataset.submitAttempted === 'true') {
 						setStatus(form, 'idle');
@@ -331,6 +415,9 @@ const turnstileSiteKey = PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000BB'
 				'expired-callback': () => {
 					tokenInput.value = '';
 					form.dataset.turnstileAwaiting = 'false';
+					settlePendingTurnstileRequest(form, ({ reject }) => {
+						reject(new Error('verification expired. try sending again.'));
+					});
 					setSubmittingState(form, false);
 
 					if (form.dataset.submitAttempted === 'true') {
@@ -340,6 +427,9 @@ const turnstileSiteKey = PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000BB'
 				'error-callback': () => {
 					tokenInput.value = '';
 					form.dataset.turnstileAwaiting = 'false';
+					settlePendingTurnstileRequest(form, ({ reject }) => {
+						reject(new Error('verification failed to load. refresh and try.'));
+					});
 					setSubmittingState(form, false);
 					setStatus(form, 'error', 'verification failed to load. refresh and try.');
 				},
@@ -364,9 +454,6 @@ const turnstileSiteKey = PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000BB'
 		}
 
 		target.dataset.submitAttempted = 'true';
-		const turnstileToken = target
-			.querySelector<HTMLInputElement>('[data-turnstile-token]')
-			?.value.trim();
 		const slot = target.querySelector<HTMLElement>('[data-turnstile-slot]');
 
 		if (!slot) {
@@ -381,11 +468,6 @@ const turnstileSiteKey = PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000BB'
 		setSubmittingState(target, true);
 		setStatus(target, 'pending', 'checking security...');
 
-		if (turnstileToken) {
-			void submitContactForm(target);
-			return;
-		}
-
 		const isRendered = await renderTurnstile(target);
 
 		if (!isRendered) {
@@ -394,18 +476,18 @@ const turnstileSiteKey = PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000BB'
 		}
 
 		try {
-			target.dataset.turnstileAwaiting = 'true';
-			const turnstile = contactFormWindow.turnstile;
-
-			if (!turnstile) {
-				throw new Error('Turnstile unavailable');
-			}
-
-			turnstile.execute(slot);
-		} catch {
+			const turnstileToken = await requestTurnstileToken(target);
+			await submitContactForm(target, turnstileToken);
+		} catch (error) {
 			target.dataset.turnstileAwaiting = 'false';
 			setSubmittingState(target, false);
-			setStatus(target, 'error', 'couldn\'t start verification. try again.');
+			setStatus(
+				target,
+				'error',
+				error instanceof Error
+					? error.message
+					: 'couldn\'t start verification. try again.',
+			);
 		}
 	};
 
