@@ -20,6 +20,7 @@ export default defineConfig({
       PUBLIC_TURNSTILE_SITE_KEY: envField.string({
         context: "client",
         access: "public",
+        optional: true,
       }),
     },
   },
