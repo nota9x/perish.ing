@@ -159,31 +159,30 @@ const sendDiscordWebhook = async (submission: {
       },
       embeds: [
         {
-          title: "New Contact Form Submission",
+          title: "📬 New Contact Form Submission",
+          description: submission.message,
           color: 0xc4714a,
           timestamp: submission.timestamp,
           fields: [
             {
-              name: "Name",
+              name: "👤 Name",
               value: submission.name,
+              inline: true,
             },
             {
-              name: "Email",
-              value: submission.email || "Not provided",
+              name: "📧 Email",
+              value: submission.email || "*Not provided*",
+              inline: true,
             },
             {
-              name: "Message",
-              value: submission.message,
-            },
-            {
-              name: "IP Address",
-              value: submission.ipAddress,
-            },
-            {
-              name: "Timestamp",
-              value: submission.timestamp,
+              name: "🌐 IP Address",
+              value: `\`${submission.ipAddress}\``,
+              inline: true,
             },
           ],
+          footer: {
+            text: "perish.ing",
+          },
         },
       ],
     }),
