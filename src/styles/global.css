@@ -701,16 +701,6 @@ img {
 
 /* ── About page ─────────────────────────────────────────────── */
 
-.about-opener {
-  margin: 0;
-  margin-top: -1rem; /* Pull up closer to the header slightly */
-  margin-bottom: 0.5rem;
-  color: var(--color-faint);
-  font-size: 0.95rem;
-  font-style: italic;
-  font-variation-settings: "wght" 380;
-}
-
 .about-hero-quote {
   position: relative;
   display: flex;
@@ -934,14 +924,6 @@ img {
 
 .about-section:nth-of-type(2) {
   animation-delay: 220ms;
-}
-
-.about-section:nth-of-type(3) {
-  animation-delay: 300ms;
-}
-
-.about-section:nth-of-type(4) {
-  animation-delay: 380ms;
 }
 
 @keyframes about-fade-up {

@@ -1,695 +1,770 @@
 ---
-import { Send } from '@lucide/astro';
-import { PUBLIC_TURNSTILE_SITE_KEY } from 'astro:env/client';
-
+import { Send } from "@lucide/astro";
+import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
 ---
 
-<section class="contact-layout contact-form-section" aria-labelledby="contact-form-title">
-	<div class="contact-intro">
-		<p class="contact-intro__label">contact form</p>
-		<p class="contact-intro__text">
-			send a note here if you want to talk through a project, an idea, or a problem
-			you need help untangling.
-		</p>
-	</div>
+<section
+  class="contact-layout contact-form-section"
+  aria-labelledby="contact-form-title"
+>
+  <div class="contact-intro">
+    <p class="contact-intro__label">contact form</p>
+    <p class="contact-intro__text">
+      send a note here if you need anything. make sure you have a way i can get
+      back to you.
+    </p>
+  </div>
 
-	<div class="contact-panel contact-form-panel">
-		<p class="contact-panel__note" id="contact-form-title">name and message are required</p>
+  <div class="contact-panel contact-form-panel">
+    <p class="contact-panel__note" id="contact-form-title">
+      name and message are required
+    </p>
 
-		<form class="contact-form" action="/api/contact" method="POST" data-contact-form data-site-key={PUBLIC_TURNSTILE_SITE_KEY}>
-			<fieldset class="contact-form__fieldset" data-form-fieldset>
-				<div class="contact-form__grid">
-					<label class="contact-form__field">
-						<span class="contact-form__label">
-							name
-							<span class="contact-form__required" aria-hidden="true">*</span>
-						</span>
-						<input
-							class="contact-form__input"
-							type="text"
-							name="name"
-							autocomplete="name"
-							maxlength="120"
-							required
-							placeholder="your name"
-						/>
-					</label>
+    <form
+      class="contact-form"
+      action="/api/contact"
+      method="POST"
+      data-contact-form
+      data-site-key={PUBLIC_TURNSTILE_SITE_KEY}
+    >
+      <fieldset class="contact-form__fieldset" data-form-fieldset>
+        <div class="contact-form__grid">
+          <label class="contact-form__field">
+            <span class="contact-form__label">
+              name
+              <span class="contact-form__required" aria-hidden="true">*</span>
+            </span>
+            <input
+              class="contact-form__input"
+              type="text"
+              name="name"
+              autocomplete="name"
+              maxlength="120"
+              required
+              placeholder="your name"
+            />
+          </label>
 
-					<label class="contact-form__field">
-						<span class="contact-form__label">email address</span>
-						<input
-							class="contact-form__input"
-							type="email"
-							name="email"
-							autocomplete="email"
-							maxlength="320"
-							placeholder="optional@email.com"
-						/>
-					</label>
+          <label class="contact-form__field">
+            <span class="contact-form__label">email address</span>
+            <input
+              class="contact-form__input"
+              type="email"
+              name="email"
+              autocomplete="email"
+              maxlength="320"
+              placeholder="optional@email.com"
+            />
+          </label>
 
-					<label class="contact-form__field contact-form__field--message">
-						<span class="contact-form__label">
-							message
-							<span class="contact-form__required" aria-hidden="true">*</span>
-						</span>
-						<textarea
-							class="contact-form__textarea"
-							name="message"
-							rows="7"
-							maxlength="1000"
-							required
-							placeholder="what are you working on, or what do you need?"
-						></textarea>
-					</label>
-				</div>
+          <label class="contact-form__field contact-form__field--message">
+            <span class="contact-form__label">
+              message
+              <span class="contact-form__required" aria-hidden="true">*</span>
+            </span>
+            <textarea
+              class="contact-form__textarea"
+              name="message"
+              rows="7"
+              maxlength="1000"
+              required
+              placeholder="what are you working on, or what do you need?"
+            ></textarea>
+          </label>
+        </div>
 
-				<input type="hidden" name="turnstileToken" value="" data-turnstile-token />
+        <input
+          type="hidden"
+          name="turnstileToken"
+          value=""
+          data-turnstile-token
+        />
 
-				<div class="contact-form__turnstile" data-turnstile-slot></div>
+        <div class="contact-form__turnstile" data-turnstile-slot></div>
 
-				<div class="contact-form__actions">
-					<button
-						class="contact-form__submit"
-						type="submit"
-						data-submit-button
-						data-idle-label="send"
-						data-loading-label="sending..."
-					>
-						<span class="contact-form__submit-icon" aria-hidden="true">
-							<Send />
-						</span>
-						<span data-submit-label>send</span>
-					</button>
-					<p class="contact-form__status" data-contact-status data-state="idle" hidden></p>
-				</div>
-			</fieldset>
-		</form>
-	</div>
+        <div class="contact-form__actions">
+          <button
+            class="contact-form__submit"
+            type="submit"
+            data-submit-button
+            data-idle-label="send"
+            data-loading-label="sending..."
+          >
+            <span class="contact-form__submit-icon" aria-hidden="true">
+              <Send />
+            </span>
+            <span data-submit-label>send</span>
+          </button>
+          <p
+            class="contact-form__status"
+            data-contact-status
+            data-state="idle"
+            hidden
+          >
+          </p>
+        </div>
+      </fieldset>
+    </form>
+  </div>
 </section>
 
 <script>
-	type TurnstileInstance = {
-		render: (
-			container: HTMLElement,
-			options: {
-				sitekey: string;
-				theme?: 'auto' | 'light' | 'dark';
-				execution?: 'render' | 'execute';
-				appearance?: 'always' | 'execute' | 'interaction-only';
-				callback?: (token: string) => void;
-				'expired-callback'?: () => void;
-				'error-callback'?: () => void;
-			},
-		) => string;
-		execute: (target: HTMLElement | string) => void;
-		getResponse: (widgetId?: string) => string;
-		isExpired: (widgetId?: string) => boolean;
-		reset: (widgetId?: string) => void;
-	};
-
-	type ContactFormWindow = Window & {
-		turnstile?: TurnstileInstance;
-		__contactFormBound?: boolean;
-		__turnstileLoader?: Promise<TurnstileInstance>;
-	};
-
-	const contactFormWindow = window as ContactFormWindow;
-	const turnstileScriptId = 'cf-turnstile-script';
-	const turnstileScriptSrc = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
-	type ContactFormState = 'idle' | 'pending' | 'success' | 'error';
-	const turnstileRequestTimeoutMs = 12000;
-	const pendingTurnstileRequests = new WeakMap<
-		HTMLFormElement,
-		{
-			resolve: (token: string) => void;
-			reject: (error: Error) => void;
-			timeoutId: number;
-		}
-	>();
-
-	const setStatus = (
-		form: HTMLFormElement,
-		state: ContactFormState,
-		message = '',
-	) => {
-		const status = form.querySelector<HTMLElement>('[data-contact-status]');
-
-		if (!status) {
-			return;
-		}
-
-		status.dataset.state = state;
-		status.textContent = message;
-		status.hidden = state === 'idle' || message.length === 0;
-	};
-
-	const setSubmittingState = (form: HTMLFormElement, isSubmitting: boolean) => {
-		const fieldset = form.querySelector<HTMLFieldSetElement>('[data-form-fieldset]');
-		const submitButton = form.querySelector<HTMLButtonElement>('[data-submit-button]');
-		const submitLabel = form.querySelector<HTMLElement>('[data-submit-label]');
-
-		if (fieldset) {
-			fieldset.disabled = isSubmitting;
-		}
-
-		if (submitButton) {
-			submitButton.disabled = isSubmitting;
-		}
-
-		if (submitLabel && submitButton) {
-			submitLabel.textContent = isSubmitting
-				? submitButton.dataset.loadingLabel ?? 'Sending...'
-				: submitButton.dataset.idleLabel ?? 'Send';
-		}
-	};
-
-	const getTurnstileLoader = () => {
-		if (contactFormWindow.turnstile) {
-			return Promise.resolve(contactFormWindow.turnstile);
-		}
-
-		if (!contactFormWindow.__turnstileLoader) {
-			contactFormWindow.__turnstileLoader = new Promise<TurnstileInstance>((resolve, reject) => {
-				const createScript = () => {
-					const script = document.createElement('script');
-					script.id = turnstileScriptId;
-					script.dataset.loadState = 'loading';
-					script.src = turnstileScriptSrc;
-					script.async = true;
-					script.defer = true;
-					script.addEventListener('load', onReady, { once: true });
-					script.addEventListener('error', onError, { once: true });
-					document.head.append(script);
-				};
-
-				const onReady = () => {
-					document.getElementById(turnstileScriptId)?.setAttribute('data-load-state', 'loaded');
-
-					if (contactFormWindow.turnstile) {
-						resolve(contactFormWindow.turnstile);
-						return;
-					}
-
-					contactFormWindow.__turnstileLoader = undefined;
-					document.getElementById(turnstileScriptId)?.remove();
-					reject(new Error('Turnstile did not initialize correctly.'));
-				};
-
-				const onError = () => {
-					document.getElementById(turnstileScriptId)?.setAttribute('data-load-state', 'error');
-					contactFormWindow.__turnstileLoader = undefined;
-					document.getElementById(turnstileScriptId)?.remove();
-					reject(new Error('Turnstile failed to load.'));
-				};
-
-				const existingScript = document.getElementById(turnstileScriptId) as HTMLScriptElement | null;
-
-				if (existingScript) {
-					if (existingScript.dataset.loadState === 'error') {
-						existingScript.remove();
-						createScript();
-						return;
-					}
-
-					existingScript.addEventListener('load', onReady, { once: true });
-					existingScript.addEventListener('error', onError, { once: true });
-					return;
-				}
-
-				createScript();
-			});
-		}
-
-		return contactFormWindow.__turnstileLoader;
-	};
-
-	const settlePendingTurnstileRequest = (
-		form: HTMLFormElement,
-		callback: (pendingRequest: {
-			resolve: (token: string) => void;
-			reject: (error: Error) => void;
-			timeoutId: number;
-		}) => void,
-	) => {
-		const pendingRequest = pendingTurnstileRequests.get(form);
-
-		if (!pendingRequest) {
-			return;
-		}
-
-		window.clearTimeout(pendingRequest.timeoutId);
-		pendingTurnstileRequests.delete(form);
-		callback(pendingRequest);
-	};
-
-	const requestTurnstileToken = async (form: HTMLFormElement) => {
-		const tokenInput = form.querySelector<HTMLInputElement>('[data-turnstile-token]');
-		const widgetId = form.dataset.turnstileWidgetId;
-		const turnstile = contactFormWindow.turnstile;
-
-		if (!tokenInput || !widgetId || !turnstile) {
-			throw new Error('couldn\'t prepare verification. refresh and try.');
-		}
-
-		tokenInput.value = '';
-		turnstile.reset(widgetId);
-		form.dataset.turnstileAwaiting = 'true';
-
-		const tokenPromise = new Promise<string>((resolve, reject) => {
-			const timeoutId = window.setTimeout(() => {
-				pendingTurnstileRequests.delete(form);
-				reject(new Error('verification timed out. try sending again.'));
-			}, turnstileRequestTimeoutMs);
-
-			pendingTurnstileRequests.set(form, { resolve, reject, timeoutId });
-		});
-
-		try {
-			turnstile.execute(widgetId);
-			return await tokenPromise;
-		} catch (error) {
-			settlePendingTurnstileRequest(form, ({ reject }) => {
-				reject(
-					error instanceof Error
-						? error
-						: new Error('couldn\'t start verification. try again.'),
-				);
-			});
-			throw error;
-		}
-	};
-
-	const submitContactForm = async (
-		form: HTMLFormElement,
-		turnstileTokenFromChallenge?: string,
-	) => {
-		const tokenInput = form.querySelector<HTMLInputElement>('[data-turnstile-token]');
-		const widgetId = form.dataset.turnstileWidgetId;
-		const turnstile = contactFormWindow.turnstile;
-		const turnstileToken = (
-			turnstileTokenFromChallenge ??
-			turnstile?.getResponse(widgetId) ??
-			tokenInput?.value ??
-			''
-		).trim();
-
-		if (!turnstileToken) {
-			form.dataset.turnstileAwaiting = 'false';
-			setSubmittingState(form, false);
-			setStatus(form, 'error', 'verification incomplete. try again.');
-			return;
-		}
-
-		// Read other fields directly from their inputs for the same reason.
-		const nameInput = form.querySelector<HTMLInputElement>('input[name="name"]');
-		const emailInput = form.querySelector<HTMLInputElement>('input[name="email"]');
-		const messageInput = form.querySelector<HTMLTextAreaElement>('textarea[name="message"]');
-
-		const payload = {
-			name: (nameInput?.value ?? '').trim(),
-			email: (emailInput?.value ?? '').trim(),
-			message: (messageInput?.value ?? '').trim(),
-			turnstileToken,
-		};
-
-		setStatus(form, 'pending', 'checking security...');
-
-		try {
-			const response = await fetch(form.action, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					Accept: 'application/json',
-				},
-				body: JSON.stringify(payload),
-			});
-
-			const result = (await response.json().catch(() => ({}))) as {
-				error?: string;
-				message?: string;
-			};
-
-			if (!response.ok) {
-				throw new Error(result.error ?? 'something went wrong. please try again.');
-			}
-
-			form.reset();
-			form.dataset.submitAttempted = 'false';
-			setStatus(
-				form,
-				'success',
-				result.message ?? "sent! i'll get back to you soon.",
-			);
-		} catch (error) {
-			setStatus(
-				form,
-				'error',
-				error instanceof Error ? error.message : 'something went wrong. please try again.',
-			);
-		} finally {
-			form.dataset.turnstileAwaiting = 'false';
-			resetTurnstile(form);
-			setSubmittingState(form, false);
-		}
-	};
-
-	const resetTurnstile = (form: HTMLFormElement) => {
-		const tokenInput = form.querySelector<HTMLInputElement>('[data-turnstile-token]');
-		const widgetId = form.dataset.turnstileWidgetId;
-
-		if (tokenInput) {
-			tokenInput.value = '';
-		}
-
-		settlePendingTurnstileRequest(form, ({ reject }) => {
-			reject(new Error('verification was interrupted. try again.'));
-		});
-
-		if (contactFormWindow.turnstile && widgetId) {
-			contactFormWindow.turnstile.reset(widgetId);
-		}
-	};
-
-	const renderTurnstile = async (form: HTMLFormElement) => {
-		if (form.dataset.turnstileRendered === 'true') {
-			return true;
-		}
-
-		const slot = form.querySelector<HTMLElement>('[data-turnstile-slot]');
-		const tokenInput = form.querySelector<HTMLInputElement>('[data-turnstile-token]');
-		const siteKey = form.dataset.siteKey?.trim();
-
-		if (!slot || !tokenInput || !siteKey) {
-			setStatus(form, 'error', 'couldn\'t prepare verification. refresh and try.');
-			return false;
-		}
-
-		try {
-			const turnstile = await getTurnstileLoader();
-			const widgetId = turnstile.render(slot, {
-				sitekey: siteKey,
-				theme: 'dark',
-				execution: 'execute',
-				appearance: 'interaction-only',
-				callback: (token) => {
-					const resolvedToken = (
-						token || turnstile.getResponse(widgetId) || ''
-					).trim();
-					tokenInput.value = resolvedToken;
-					form.dataset.turnstileAwaiting = 'false';
-					settlePendingTurnstileRequest(form, ({ resolve, reject }) => {
-						if (!resolvedToken) {
-							reject(new Error('verification incomplete. try again.'));
-							return;
-						}
-
-						resolve(resolvedToken);
-					});
-
-					if (form.dataset.submitAttempted === 'true') {
-						setStatus(form, 'idle');
-					}
-				},
-				'expired-callback': () => {
-					tokenInput.value = '';
-					form.dataset.turnstileAwaiting = 'false';
-					settlePendingTurnstileRequest(form, ({ reject }) => {
-						reject(new Error('verification expired. try sending again.'));
-					});
-					setSubmittingState(form, false);
-
-					if (form.dataset.submitAttempted === 'true') {
-						setStatus(form, 'error', 'verification expired. try sending again.');
-					}
-				},
-				'error-callback': () => {
-					tokenInput.value = '';
-					form.dataset.turnstileAwaiting = 'false';
-					settlePendingTurnstileRequest(form, ({ reject }) => {
-						reject(new Error('verification failed to load. refresh and try.'));
-					});
-					setSubmittingState(form, false);
-					setStatus(form, 'error', 'verification failed to load. refresh and try.');
-				},
-			});
-
-			form.dataset.turnstileRendered = 'true';
-			form.dataset.turnstileWidgetId = widgetId;
-			return true;
-		} catch {
-			setStatus(form, 'error', 'Verification failed to load. Refresh and try again.');
-			return false;
-		}
-	};
-
-	const handleSubmit = async (event: SubmitEvent) => {
-		event.preventDefault();
-
-		const target = event.currentTarget;
-
-		if (!(target instanceof HTMLFormElement)) {
-			return;
-		}
-
-		target.dataset.submitAttempted = 'true';
-		const slot = target.querySelector<HTMLElement>('[data-turnstile-slot]');
-
-		if (!slot) {
-			setStatus(target, 'error', 'couldn\'t prepare verification. refresh and try.');
-			return;
-		}
-
-		if (target.dataset.turnstileAwaiting === 'true') {
-			return;
-		}
-
-		setSubmittingState(target, true);
-		setStatus(target, 'pending', 'checking security...');
-
-		const isRendered = await renderTurnstile(target);
-
-		if (!isRendered) {
-			setSubmittingState(target, false);
-			return;
-		}
-
-		try {
-			const turnstileToken = await requestTurnstileToken(target);
-			await submitContactForm(target, turnstileToken);
-		} catch (error) {
-			target.dataset.turnstileAwaiting = 'false';
-			setSubmittingState(target, false);
-			setStatus(
-				target,
-				'error',
-				error instanceof Error
-					? error.message
-					: 'couldn\'t start verification. try again.',
-			);
-		}
-	};
-
-	const initializeContactForms = () => {
-		const forms = document.querySelectorAll<HTMLFormElement>('[data-contact-form]');
-
-		for (const form of forms) {
-			if (form.dataset.contactFormReady !== 'true') {
-				form.addEventListener('submit', handleSubmit);
-				form.dataset.contactFormReady = 'true';
-			}
-
-			void renderTurnstile(form);
-		}
-	};
-
-	if (!contactFormWindow.__contactFormBound) {
-		document.addEventListener('astro:page-load', initializeContactForms);
-		contactFormWindow.__contactFormBound = true;
-	}
-
-	initializeContactForms();
+  type TurnstileInstance = {
+    render: (
+      container: HTMLElement,
+      options: {
+        sitekey: string;
+        theme?: "auto" | "light" | "dark";
+        execution?: "render" | "execute";
+        appearance?: "always" | "execute" | "interaction-only";
+        callback?: (token: string) => void;
+        "expired-callback"?: () => void;
+        "error-callback"?: () => void;
+      },
+    ) => string;
+    execute: (target: HTMLElement | string) => void;
+    getResponse: (widgetId?: string) => string;
+    isExpired: (widgetId?: string) => boolean;
+    reset: (widgetId?: string) => void;
+  };
+
+  type ContactFormWindow = Window & {
+    turnstile?: TurnstileInstance;
+    __contactFormBound?: boolean;
+    __turnstileLoader?: Promise<TurnstileInstance>;
+  };
+
+  const contactFormWindow = window as ContactFormWindow;
+  const turnstileScriptId = "cf-turnstile-script";
+  const turnstileScriptSrc =
+    "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+  type ContactFormState = "idle" | "pending" | "success" | "error";
+  const turnstileRequestTimeoutMs = 12000;
+  const pendingTurnstileRequests = new WeakMap<
+    HTMLFormElement,
+    {
+      resolve: (token: string) => void;
+      reject: (error: Error) => void;
+      timeoutId: number;
+    }
+  >();
+
+  const setStatus = (
+    form: HTMLFormElement,
+    state: ContactFormState,
+    message = "",
+  ) => {
+    const status = form.querySelector<HTMLElement>("[data-contact-status]");
+
+    if (!status) {
+      return;
+    }
+
+    status.dataset.state = state;
+    status.textContent = message;
+    status.hidden = state === "idle" || message.length === 0;
+  };
+
+  const setSubmittingState = (form: HTMLFormElement, isSubmitting: boolean) => {
+    const fieldset = form.querySelector<HTMLFieldSetElement>(
+      "[data-form-fieldset]",
+    );
+    const submitButton = form.querySelector<HTMLButtonElement>(
+      "[data-submit-button]",
+    );
+    const submitLabel = form.querySelector<HTMLElement>("[data-submit-label]");
+
+    if (fieldset) {
+      fieldset.disabled = isSubmitting;
+    }
+
+    if (submitButton) {
+      submitButton.disabled = isSubmitting;
+    }
+
+    if (submitLabel && submitButton) {
+      submitLabel.textContent = isSubmitting
+        ? (submitButton.dataset.loadingLabel ?? "Sending...")
+        : (submitButton.dataset.idleLabel ?? "Send");
+    }
+  };
+
+  const getTurnstileLoader = () => {
+    if (contactFormWindow.turnstile) {
+      return Promise.resolve(contactFormWindow.turnstile);
+    }
+
+    if (!contactFormWindow.__turnstileLoader) {
+      contactFormWindow.__turnstileLoader = new Promise<TurnstileInstance>(
+        (resolve, reject) => {
+          const createScript = () => {
+            const script = document.createElement("script");
+            script.id = turnstileScriptId;
+            script.dataset.loadState = "loading";
+            script.src = turnstileScriptSrc;
+            script.async = true;
+            script.defer = true;
+            script.addEventListener("load", onReady, { once: true });
+            script.addEventListener("error", onError, { once: true });
+            document.head.append(script);
+          };
+
+          const onReady = () => {
+            document
+              .getElementById(turnstileScriptId)
+              ?.setAttribute("data-load-state", "loaded");
+
+            if (contactFormWindow.turnstile) {
+              resolve(contactFormWindow.turnstile);
+              return;
+            }
+
+            contactFormWindow.__turnstileLoader = undefined;
+            document.getElementById(turnstileScriptId)?.remove();
+            reject(new Error("Turnstile did not initialize correctly."));
+          };
+
+          const onError = () => {
+            document
+              .getElementById(turnstileScriptId)
+              ?.setAttribute("data-load-state", "error");
+            contactFormWindow.__turnstileLoader = undefined;
+            document.getElementById(turnstileScriptId)?.remove();
+            reject(new Error("Turnstile failed to load."));
+          };
+
+          const existingScript = document.getElementById(
+            turnstileScriptId,
+          ) as HTMLScriptElement | null;
+
+          if (existingScript) {
+            if (existingScript.dataset.loadState === "error") {
+              existingScript.remove();
+              createScript();
+              return;
+            }
+
+            existingScript.addEventListener("load", onReady, { once: true });
+            existingScript.addEventListener("error", onError, { once: true });
+            return;
+          }
+
+          createScript();
+        },
+      );
+    }
+
+    return contactFormWindow.__turnstileLoader;
+  };
+
+  const settlePendingTurnstileRequest = (
+    form: HTMLFormElement,
+    callback: (pendingRequest: {
+      resolve: (token: string) => void;
+      reject: (error: Error) => void;
+      timeoutId: number;
+    }) => void,
+  ) => {
+    const pendingRequest = pendingTurnstileRequests.get(form);
+
+    if (!pendingRequest) {
+      return;
+    }
+
+    window.clearTimeout(pendingRequest.timeoutId);
+    pendingTurnstileRequests.delete(form);
+    callback(pendingRequest);
+  };
+
+  const requestTurnstileToken = async (form: HTMLFormElement) => {
+    const tokenInput = form.querySelector<HTMLInputElement>(
+      "[data-turnstile-token]",
+    );
+    const widgetId = form.dataset.turnstileWidgetId;
+    const turnstile = contactFormWindow.turnstile;
+
+    if (!tokenInput || !widgetId || !turnstile) {
+      throw new Error("couldn't prepare verification. refresh and try.");
+    }
+
+    tokenInput.value = "";
+    turnstile.reset(widgetId);
+    form.dataset.turnstileAwaiting = "true";
+
+    const tokenPromise = new Promise<string>((resolve, reject) => {
+      const timeoutId = window.setTimeout(() => {
+        pendingTurnstileRequests.delete(form);
+        reject(new Error("verification timed out. try sending again."));
+      }, turnstileRequestTimeoutMs);
+
+      pendingTurnstileRequests.set(form, { resolve, reject, timeoutId });
+    });
+
+    try {
+      turnstile.execute(widgetId);
+      return await tokenPromise;
+    } catch (error) {
+      settlePendingTurnstileRequest(form, ({ reject }) => {
+        reject(
+          error instanceof Error
+            ? error
+            : new Error("couldn't start verification. try again."),
+        );
+      });
+      throw error;
+    }
+  };
+
+  const submitContactForm = async (
+    form: HTMLFormElement,
+    turnstileTokenFromChallenge?: string,
+  ) => {
+    const tokenInput = form.querySelector<HTMLInputElement>(
+      "[data-turnstile-token]",
+    );
+    const widgetId = form.dataset.turnstileWidgetId;
+    const turnstile = contactFormWindow.turnstile;
+    const turnstileToken = (
+      turnstileTokenFromChallenge ??
+      turnstile?.getResponse(widgetId) ??
+      tokenInput?.value ??
+      ""
+    ).trim();
+
+    if (!turnstileToken) {
+      form.dataset.turnstileAwaiting = "false";
+      setSubmittingState(form, false);
+      setStatus(form, "error", "verification incomplete. try again.");
+      return;
+    }
+
+    // Read other fields directly from their inputs for the same reason.
+    const nameInput =
+      form.querySelector<HTMLInputElement>('input[name="name"]');
+    const emailInput = form.querySelector<HTMLInputElement>(
+      'input[name="email"]',
+    );
+    const messageInput = form.querySelector<HTMLTextAreaElement>(
+      'textarea[name="message"]',
+    );
+
+    const payload = {
+      name: (nameInput?.value ?? "").trim(),
+      email: (emailInput?.value ?? "").trim(),
+      message: (messageInput?.value ?? "").trim(),
+      turnstileToken,
+    };
+
+    setStatus(form, "pending", "checking security...");
+
+    try {
+      const response = await fetch(form.action, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = (await response.json().catch(() => ({}))) as {
+        error?: string;
+        message?: string;
+      };
+
+      if (!response.ok) {
+        throw new Error(
+          result.error ?? "something went wrong. please try again.",
+        );
+      }
+
+      form.reset();
+      form.dataset.submitAttempted = "false";
+      setStatus(
+        form,
+        "success",
+        result.message ?? "sent! i'll get back to you soon.",
+      );
+    } catch (error) {
+      setStatus(
+        form,
+        "error",
+        error instanceof Error
+          ? error.message
+          : "something went wrong. please try again.",
+      );
+    } finally {
+      form.dataset.turnstileAwaiting = "false";
+      resetTurnstile(form);
+      setSubmittingState(form, false);
+    }
+  };
+
+  const resetTurnstile = (form: HTMLFormElement) => {
+    const tokenInput = form.querySelector<HTMLInputElement>(
+      "[data-turnstile-token]",
+    );
+    const widgetId = form.dataset.turnstileWidgetId;
+
+    if (tokenInput) {
+      tokenInput.value = "";
+    }
+
+    settlePendingTurnstileRequest(form, ({ reject }) => {
+      reject(new Error("verification was interrupted. try again."));
+    });
+
+    if (contactFormWindow.turnstile && widgetId) {
+      contactFormWindow.turnstile.reset(widgetId);
+    }
+  };
+
+  const renderTurnstile = async (form: HTMLFormElement) => {
+    if (form.dataset.turnstileRendered === "true") {
+      return true;
+    }
+
+    const slot = form.querySelector<HTMLElement>("[data-turnstile-slot]");
+    const tokenInput = form.querySelector<HTMLInputElement>(
+      "[data-turnstile-token]",
+    );
+    const siteKey = form.dataset.siteKey?.trim();
+
+    if (!slot || !tokenInput || !siteKey) {
+      setStatus(
+        form,
+        "error",
+        "couldn't prepare verification. refresh and try.",
+      );
+      return false;
+    }
+
+    try {
+      const turnstile = await getTurnstileLoader();
+      const widgetId = turnstile.render(slot, {
+        sitekey: siteKey,
+        theme: "dark",
+        execution: "execute",
+        appearance: "interaction-only",
+        callback: (token) => {
+          const resolvedToken = (
+            token ||
+            turnstile.getResponse(widgetId) ||
+            ""
+          ).trim();
+          tokenInput.value = resolvedToken;
+          form.dataset.turnstileAwaiting = "false";
+          settlePendingTurnstileRequest(form, ({ resolve, reject }) => {
+            if (!resolvedToken) {
+              reject(new Error("verification incomplete. try again."));
+              return;
+            }
+
+            resolve(resolvedToken);
+          });
+
+          if (form.dataset.submitAttempted === "true") {
+            setStatus(form, "idle");
+          }
+        },
+        "expired-callback": () => {
+          tokenInput.value = "";
+          form.dataset.turnstileAwaiting = "false";
+          settlePendingTurnstileRequest(form, ({ reject }) => {
+            reject(new Error("verification expired. try sending again."));
+          });
+          setSubmittingState(form, false);
+
+          if (form.dataset.submitAttempted === "true") {
+            setStatus(
+              form,
+              "error",
+              "verification expired. try sending again.",
+            );
+          }
+        },
+        "error-callback": () => {
+          tokenInput.value = "";
+          form.dataset.turnstileAwaiting = "false";
+          settlePendingTurnstileRequest(form, ({ reject }) => {
+            reject(new Error("verification failed to load. refresh and try."));
+          });
+          setSubmittingState(form, false);
+          setStatus(
+            form,
+            "error",
+            "verification failed to load. refresh and try.",
+          );
+        },
+      });
+
+      form.dataset.turnstileRendered = "true";
+      form.dataset.turnstileWidgetId = widgetId;
+      return true;
+    } catch {
+      setStatus(
+        form,
+        "error",
+        "Verification failed to load. Refresh and try again.",
+      );
+      return false;
+    }
+  };
+
+  const handleSubmit = async (event: SubmitEvent) => {
+    event.preventDefault();
+
+    const target = event.currentTarget;
+
+    if (!(target instanceof HTMLFormElement)) {
+      return;
+    }
+
+    target.dataset.submitAttempted = "true";
+    const slot = target.querySelector<HTMLElement>("[data-turnstile-slot]");
+
+    if (!slot) {
+      setStatus(
+        target,
+        "error",
+        "couldn't prepare verification. refresh and try.",
+      );
+      return;
+    }
+
+    if (target.dataset.turnstileAwaiting === "true") {
+      return;
+    }
+
+    setSubmittingState(target, true);
+    setStatus(target, "pending", "checking security...");
+
+    const isRendered = await renderTurnstile(target);
+
+    if (!isRendered) {
+      setSubmittingState(target, false);
+      return;
+    }
+
+    try {
+      const turnstileToken = await requestTurnstileToken(target);
+      await submitContactForm(target, turnstileToken);
+    } catch (error) {
+      target.dataset.turnstileAwaiting = "false";
+      setSubmittingState(target, false);
+      setStatus(
+        target,
+        "error",
+        error instanceof Error
+          ? error.message
+          : "couldn't start verification. try again.",
+      );
+    }
+  };
+
+  const initializeContactForms = () => {
+    const forms = document.querySelectorAll<HTMLFormElement>(
+      "[data-contact-form]",
+    );
+
+    for (const form of forms) {
+      if (form.dataset.contactFormReady !== "true") {
+        form.addEventListener("submit", handleSubmit);
+        form.dataset.contactFormReady = "true";
+      }
+
+      void renderTurnstile(form);
+    }
+  };
+
+  if (!contactFormWindow.__contactFormBound) {
+    document.addEventListener("astro:page-load", initializeContactForms);
+    contactFormWindow.__contactFormBound = true;
+  }
+
+  initializeContactForms();
 </script>
 
 <style>
-	.contact-form-panel {
-		gap: 1.25rem;
-	}
+  .contact-form-panel {
+    gap: 1.25rem;
+  }
 
-	.contact-form {
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-	}
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
 
-	.contact-form__fieldset {
-		margin: 0;
-		padding: 0;
-		border: 0;
-		min-width: 0;
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-	}
+  .contact-form__fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
 
-	.contact-form__grid {
-		display: grid;
-		gap: 0.9rem;
-	}
+  .contact-form__grid {
+    display: grid;
+    gap: 0.9rem;
+  }
 
-	.contact-form__field {
-		display: flex;
-		flex-direction: column;
-		gap: 0.45rem;
-	}
+  .contact-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
 
-	.contact-form__label {
-		color: color-mix(in srgb, var(--color-text) 88%, var(--color-muted));
-		font-size: 0.94rem;
-		font-variation-settings: "wght" 600;
-		letter-spacing: 0.02em;
-		text-transform: lowercase;
-	}
+  .contact-form__label {
+    color: color-mix(in srgb, var(--color-text) 88%, var(--color-muted));
+    font-size: 0.94rem;
+    font-variation-settings: "wght" 600;
+    letter-spacing: 0.02em;
+    text-transform: lowercase;
+  }
 
-	.contact-form__required {
-		color: var(--color-accent);
-	}
+  .contact-form__required {
+    color: var(--color-accent);
+  }
 
-	.contact-form__input,
-	.contact-form__textarea {
-		width: 100%;
-		padding: 0.95rem 1rem;
-		border: 1px solid var(--color-border);
-		border-radius: 1rem;
-		background: rgba(22, 19, 17, 0.5);
-		color: var(--color-text);
-		transition:
-			border-color var(--transition-fast),
-			background-color var(--transition-fast),
-			box-shadow var(--transition-fast);
-	}
+  .contact-form__input,
+  .contact-form__textarea {
+    width: 100%;
+    padding: 0.95rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 1rem;
+    background: rgba(22, 19, 17, 0.5);
+    color: var(--color-text);
+    transition:
+      border-color var(--transition-fast),
+      background-color var(--transition-fast),
+      box-shadow var(--transition-fast);
+  }
 
-	.contact-form__input::placeholder,
-	.contact-form__textarea::placeholder {
-		color: color-mix(in srgb, var(--color-faint) 75%, var(--color-muted));
-	}
+  .contact-form__input::placeholder,
+  .contact-form__textarea::placeholder {
+    color: color-mix(in srgb, var(--color-faint) 75%, var(--color-muted));
+  }
 
-	.contact-form__input:hover,
-	.contact-form__textarea:hover {
-		border-color: rgba(196, 113, 74, 0.24);
-		background: rgba(26, 22, 18, 0.58);
-	}
+  .contact-form__input:hover,
+  .contact-form__textarea:hover {
+    border-color: rgba(196, 113, 74, 0.24);
+    background: rgba(26, 22, 18, 0.58);
+  }
 
-	.contact-form__input:focus,
-	.contact-form__textarea:focus {
-		outline: none;
-		border-color: rgba(196, 113, 74, 0.44);
-		background: rgba(26, 22, 18, 0.66);
-		box-shadow: 0 0 0 3px rgba(196, 113, 74, 0.14);
-	}
+  .contact-form__input:focus,
+  .contact-form__textarea:focus {
+    outline: none;
+    border-color: rgba(196, 113, 74, 0.44);
+    background: rgba(26, 22, 18, 0.66);
+    box-shadow: 0 0 0 3px rgba(196, 113, 74, 0.14);
+  }
 
-	.contact-form__textarea {
-		min-height: 10rem;
-		resize: vertical;
-	}
+  .contact-form__textarea {
+    min-height: 10rem;
+    resize: vertical;
+  }
 
-	.contact-form__turnstile {
-		display: block;
-	}
+  .contact-form__turnstile {
+    display: block;
+  }
 
-	.contact-form__hint {
-		margin: 0;
-		color: var(--color-faint);
-		font-size: 0.92rem;
-		line-height: 1.65;
-	}
+  .contact-form__hint {
+    margin: 0;
+    color: var(--color-faint);
+    font-size: 0.92rem;
+    line-height: 1.65;
+  }
 
-	.contact-form__actions {
-		display: flex;
-		align-items: center;
-		gap: 0.85rem;
-		flex-wrap: wrap;
-	}
+  .contact-form__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+  }
 
-	.contact-form__submit {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		gap: 0.55rem;
-		padding: 0.9rem 1.25rem;
-		border: 1px solid rgba(196, 113, 74, 0.38);
-		border-radius: 999px;
-		background: linear-gradient(
-			135deg,
-			rgba(196, 113, 74, 0.22),
-			rgba(196, 113, 74, 0.1)
-		);
-		color: var(--color-text);
-		font-size: 0.96rem;
-		font-variation-settings: "wght" 700;
-		letter-spacing: 0.03em;
-		text-transform: lowercase;
-		cursor: pointer;
-		transition:
-			transform var(--transition-fast),
-			border-color var(--transition-fast),
-			background-color var(--transition-fast);
-	}
+  .contact-form__submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    padding: 0.9rem 1.25rem;
+    border: 1px solid rgba(196, 113, 74, 0.38);
+    border-radius: 999px;
+    background: linear-gradient(
+      135deg,
+      rgba(196, 113, 74, 0.22),
+      rgba(196, 113, 74, 0.1)
+    );
+    color: var(--color-text);
+    font-size: 0.96rem;
+    font-variation-settings: "wght" 700;
+    letter-spacing: 0.03em;
+    text-transform: lowercase;
+    cursor: pointer;
+    transition:
+      transform var(--transition-fast),
+      border-color var(--transition-fast),
+      background-color var(--transition-fast);
+  }
 
-	.contact-form__submit-icon {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-	}
+  .contact-form__submit-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-	.contact-form__submit-icon :global(svg) {
-		width: 1rem;
-		height: 1rem;
-	}
+  .contact-form__submit-icon :global(svg) {
+    width: 1rem;
+    height: 1rem;
+  }
 
-	.contact-form__submit:hover,
-	.contact-form__submit:focus-visible {
-		border-color: rgba(196, 113, 74, 0.58);
-		background: linear-gradient(
-			135deg,
-			rgba(196, 113, 74, 0.28),
-			rgba(196, 113, 74, 0.14)
-		);
-		transform: translateY(-1px);
-	}
+  .contact-form__submit:hover,
+  .contact-form__submit:focus-visible {
+    border-color: rgba(196, 113, 74, 0.58);
+    background: linear-gradient(
+      135deg,
+      rgba(196, 113, 74, 0.28),
+      rgba(196, 113, 74, 0.14)
+    );
+    transform: translateY(-1px);
+  }
 
-	.contact-form__submit:disabled {
-		cursor: progress;
-		opacity: 0.82;
-		transform: none;
-	}
+  .contact-form__submit:disabled {
+    cursor: progress;
+    opacity: 0.82;
+    transform: none;
+  }
 
-	.contact-form__status {
-		margin: 0;
-		padding: 0;
-		font-size: 0.92rem;
-		line-height: 1.5;
-		transition: color var(--transition-fast);
-	}
+  .contact-form__status {
+    margin: 0;
+    padding: 0;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    transition: color var(--transition-fast);
+  }
 
-	.contact-form__status[data-state='pending'] {
-		color: color-mix(in srgb, var(--color-text) 60%, var(--color-muted));
-	}
+  .contact-form__status[data-state="pending"] {
+    color: color-mix(in srgb, var(--color-text) 60%, var(--color-muted));
+  }
 
-	.contact-form__status[data-state='success'] {
-		color: color-mix(in srgb, var(--color-text) 80%, #b6d8b9);
-	}
+  .contact-form__status[data-state="success"] {
+    color: color-mix(in srgb, var(--color-text) 80%, #b6d8b9);
+  }
 
-	.contact-form__status[data-state='error'] {
-		color: color-mix(in srgb, var(--color-text) 80%, #e7c0ad);
-	}
+  .contact-form__status[data-state="error"] {
+    color: color-mix(in srgb, var(--color-text) 80%, #e7c0ad);
+  }
 
-	@media (min-width: 720px) {
-		.contact-form__grid {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-		}
+  @media (min-width: 720px) {
+    .contact-form__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 
-		.contact-form__field--message {
-			grid-column: 1 / -1;
-		}
-	}
+    .contact-form__field--message {
+      grid-column: 1 / -1;
+    }
+  }
 </style>

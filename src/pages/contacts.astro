@@ -1,80 +1,86 @@
 ---
-import { Mail, MessageSquare } from '@lucide/astro';
-import { slide } from 'astro:transitions';
-import BackRow from '../components/BackRow.astro';
-import ContactForm from '../components/ContactForm.astro';
-import Layout from '../layouts/Layout.astro';
-import NavRow from '../components/NavRow.astro';
-import { siteConfig } from '../data/site';
+import { Mail, MessageSquare } from "@lucide/astro";
+import { slide } from "astro:transitions";
+import BackRow from "../components/BackRow.astro";
+import ContactForm from "../components/ContactForm.astro";
+import Layout from "../layouts/Layout.astro";
+import NavRow from "../components/NavRow.astro";
+import { siteConfig } from "../data/site";
 
 export const prerender = true;
 
 const structuredData = [
-	{
-		'@type': 'ContactPoint',
-		'@id': `${siteConfig.url}/contacts/#contact-point`,
-		email: siteConfig.email,
-		url: `${siteConfig.url}/contacts/`,
-		contactType: 'customer support',
-		availableLanguage: ['en'],
-	},
+  {
+    "@type": "ContactPoint",
+    "@id": `${siteConfig.url}/contact/#contact-point`,
+    email: siteConfig.email,
+    url: `${siteConfig.url}/contact/`,
+    contactType: "customer support",
+    availableLanguage: ["en"],
+  },
 ];
 ---
 
 <Layout
-	title="contact | a9x"
-	description="Contact a9x by email or Discord about web design, full-stack development, managed hosting, and infrastructure support."
-	pageType="ContactPage"
-	structuredData={structuredData}
+  title="contact | a9x"
+  description="Contact a9x by email or Discord about web design, full-stack development, managed hosting, and infrastructure support."
+  pageType="ContactPage"
+  structuredData={structuredData}
 >
-	<article class="page page--interior" transition:name="page" transition:animate={slide({ duration: '0.28s' })} tabindex="-1" data-page>
-		<div class="page-header">
-			<h1 class="page-title" transition:name="contacts-title">contacts</h1>
-			<p class="page-subtitle">you can reach me here</p>
-		</div>
+  <article
+    class="page page--interior"
+    transition:name="page"
+    transition:animate={slide({ duration: "0.28s" })}
+    tabindex="-1"
+    data-page
+  >
+    <div class="page-header">
+      <h1 class="page-title" transition:name="contact-title">contact</h1>
+      <p class="page-subtitle">you can reach me here</p>
+    </div>
 
-		<ContactForm />
+    <ContactForm />
 
-		<section class="contact-layout" aria-label="Contact methods">
-			<div class="contact-intro">
-				<p class="contact-intro__label">direct</p>
-				<p class="contact-intro__text">
-					a couple of simple ways to reach me without digging around for links.
-				</p>
-			</div>
+    <section class="contact-layout" aria-label="Contact methods">
+      <div class="contact-intro">
+        <p class="contact-intro__label">direct</p>
+        <p class="contact-intro__text">
+          a few simple ways to reach me without digging around.
+        </p>
+      </div>
 
-			<div class="contact-panel">
-				<p class="contact-panel__note">choose whatever feels easiest</p>
+      <div class="contact-panel">
+        <p class="contact-panel__note">choose whatever feels easiest</p>
 
-				<div class="row-stack row-stack--comfortable">
-					<NavRow
-						href="https://discord.com/users/693893365380546571"
-						target="_blank"
-						rel="noreferrer"
-						icon={MessageSquare}
-						variant="stacked"
-						title="discord"
-						main="@a9x."
-						description="open profile or copy username"
-						copyValue="@a9x."
-						copySuccess="Discord username copied."
-					/>
-					<NavRow
-						href="mailto:a9x@is.perish.ing"
-						icon={Mail}
-						variant="stacked"
-						title="email"
-						main="a9x@is.perish.ing"
-						description="open or copy email"
-						copyValue="a9x@is.perish.ing"
-						copySuccess="Email address copied."
-					/>
-				</div>
-			</div>
-		</section>
+        <div class="row-stack row-stack--comfortable">
+          <NavRow
+            href="https://discord.com/users/693893365380546571"
+            target="_blank"
+            rel="noreferrer"
+            icon={MessageSquare}
+            variant="stacked"
+            title="discord"
+            main="@a9x."
+            description="open profile or copy username"
+            copyValue="@a9x."
+            copySuccess="Discord username copied."
+          />
+          <NavRow
+            href="mailto:a9x@is.perish.ing"
+            icon={Mail}
+            variant="stacked"
+            title="email"
+            main="a9x@is.perish.ing"
+            description="open or copy email"
+            copyValue="a9x@is.perish.ing"
+            copySuccess="Email address copied."
+          />
+        </div>
+      </div>
+    </section>
 
-		<footer class="page-footer">
-			<BackRow href="/" label="back" />
-		</footer>
-	</article>
+    <footer class="page-footer">
+      <BackRow href="/" label="back" />
+    </footer>
+  </article>
 </Layout>

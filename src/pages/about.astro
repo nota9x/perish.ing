@@ -1,5 +1,5 @@
 ---
-import { Globe, Eye, Compass, Terminal } from "@lucide/astro";
+import { Globe, Compass } from "@lucide/astro";
 import { slide } from "astro:transitions";
 import BackRow from "../components/BackRow.astro";
 import { siteConfig } from "../data/site";
@@ -41,10 +41,6 @@ const structuredData = [
       <p class="page-subtitle">a little about how i see things</p>
     </div>
 
-    <p class="about-opener" aria-hidden="true">
-      this is probably the most honest page on this site.
-    </p>
-
     <!-- Hero Quote -->
     <div class="about-hero-quote" aria-label="Opening quote">
       <div class="about-hero-quote__mark" aria-hidden="true">&ldquo;</div>
@@ -69,98 +65,49 @@ const structuredData = [
 
       <div class="about-section__body">
         <p>
-          i grew up here in the united states, and i've watched enough to know
-          we don't always live up to what we tell ourselves we are. there's a
-          lot that's broken — not just here, but everywhere. systems that forget
-          the people inside them, conversations turning into shouting matches
-          before anyone listens.
+          i grew up in new jersey. i think that shapes you in ways you don't
+          notice until you're somewhere else — you learn early that nobody's
+          going to go easy on you, that most people are more complicated than
+          they look, and that the world right outside your window can be
+          completely different from the one two towns over.
         </p>
         <p>
-          i've thought about it a lot, and i keep coming back to the same place:
-          the only thing that has ever actually fixed anything in practice is
-          when someone decides to understand someone else first.
+          i've watched enough to know we don't always live up to what we tell
+          ourselves we are. not here, not anywhere. systems that forget the
+          people inside them. conversations that turn into shouting matches
+          before anyone actually listens.
         </p>
 
         <div class="about-callout">
           <span class="about-callout__bar" aria-hidden="true"></span>
           <p class="about-callout__text">
-            not agreement. not compromise. just… seeing another person clearly,
-            even when you disagree with everything they stand for. that changes
-            something.
+            and i keep landing in the same place: the only thing that has ever
+            actually fixed anything, in practice, is when someone decides to
+            understand someone else first. not agree with them. not meet them
+            halfway. just see them clearly, even when you disagree with
+            everything they stand for. something shifts when you do that.
           </p>
         </div>
 
         <p>
           i don't think unity means pretending things are fine. i think it means
-          caring enough to show up when it's hard. empathy isn't softness. it
-          takes more out of you than anger ever does, but it's the only thing
-          i've seen actually move the needle.
+          caring enough to show up when it's hard. empathy isn't softness — it
+          takes more out of you than anger does, but it's the only thing i've
+          ever seen actually move the needle.
         </p>
         <p>
-          so that's my baseline. the world is messy and full of contradictions,
-          and i still choose to believe people are worth it. not because i'm
-          optimistic, but because what's the alternative?
+          the world is messy and full of contradictions, and i still choose to
+          believe people are worth it. not out of optimism. just — what's the
+          alternative?
         </p>
       </div>
     </section>
 
-    <!-- Section 2: What Always Catches My Attention -->
-    <section class="about-section" aria-label="What catches my attention">
-      <div class="about-section__header">
-        <span class="about-section__icon" aria-hidden="true"><Eye /></span>
-        <h2 class="about-section__title">what always catches my attention</h2>
-      </div>
-
-      <div class="about-divider" aria-hidden="true">
-        <span class="about-divider__line"></span>
-      </div>
-
-      <div class="about-section__body">
-        <p>
-          there's this thing that happens whenever i hear sirens. i don't just
-          hear them — i notice them. i'll stop mid-sentence, look toward the
-          sound, and somewhere in the back of my mind i'm already thinking about
-          where they're headed and what happened. a structure fire? a medical
-          call? someone just having the worst day of their life?
-        </p>
-        <p>
-          i've been like that for as long as i can remember. something about
-          public safety, about the people who drive toward the thing everyone
-          else runs from, has always stuck with me. not in a hero-worship kind
-          of way. more like — there are people out there right now, at 3am,
-          making split-second decisions that change someone's entire future. and
-          most of us just sleep through it.
-        </p>
-
-        <div class="about-inline-quote">
-          <p>
-            i think about that a lot. the weight of the things that happen while
-            the rest of the world isn't watching.
-          </p>
-        </div>
-
-        <p>
-          aviation hits me in a similar way, but for completely different
-          reasons. there's a moment right after takeoff — the wheels leave the
-          ground, the noise changes, and everything below you gets small really
-          fast. it's the closest thing to a reset button i've found. you're not
-          in any city or any country. you're just… up there. it always makes the
-          problems on the ground feel like they have edges, like they're
-          containable. and for some reason that's incredibly calming.
-        </p>
-        <p>
-          i can sit at a window seat and watch approach patterns for hours and
-          not get bored. the way a plane turns final, lines up with a runway
-          from miles out, and just commits. there's something honest about it.
-        </p>
-      </div>
-    </section>
-
-    <!-- Section 3: What I Spend My Time Doing -->
-    <section class="about-section" aria-label="What I spend my time doing">
+    <!-- Section 2: My Hobbies -->
+    <section class="about-section" aria-label="My hobbies">
       <div class="about-section__header">
         <span class="about-section__icon" aria-hidden="true"><Compass /></span>
-        <h2 class="about-section__title">what i spend my time doing</h2>
+        <h2 class="about-section__title">my hobbies</h2>
       </div>
 
       <div class="about-divider" aria-hidden="true">
@@ -169,88 +116,86 @@ const structuredData = [
 
       <div class="about-section__body">
         <p>
-          some weekends i'll drive out to places most people pretend don't
-          exist. abandoned buildings, old factories, overgrown lots that used to
-          be something. urbex — urban exploring — is hard to explain to people
-          who haven't done it. it's not about the danger or the trespassing or
-          the aesthetic instagram shots.
-        </p>
-        <p>
-          it's about standing in a room where hundreds of people used to work or
-          live or learn, and now it's just peeling paint and silence. there's a
-          kind of honesty in decay. nothing is performing for you. it's just…
-          what's left when everything else moves on.
+          urban exploration — urbex — is the one i have the hardest time
+          explaining without it sounding like something it's not. some weekends
+          i'll drive out to abandoned buildings, old factories, places that used
+          to be something and got left behind. people hear that and think it's
+          about danger, or trespassing, or getting a moody shot for instagram.
+          it's none of those things.
         </p>
 
         <div class="about-callout">
           <span class="about-callout__bar" aria-hidden="true"></span>
           <p class="about-callout__text">
-            i think that's why i keep going back. it reminds me that nothing is
-            permanent, and that's not sad — it's just true.
+            it's about standing in a room where hundreds of people used to work
+            or live or learn, and now it's just peeling paint and silence.
+            nothing is performing for you. it's just what's left when everything
+            else moves on. there's an honesty in that i don't find many other
+            places. it reminds me that nothing is permanent — and i mean that as
+            a relief, not a tragedy.
           </p>
         </div>
 
         <p>
-          the rest of the time, honestly, it's pretty simple. i like being
-          around my friends. not doing anything specific — just existing in the
-          same space. driving around at night with the windows down. sitting in
-          someone's kitchen talking about something that doesn't matter at all
-          and laughing until it hurts. the kind of time that doesn't make it
-          into any story because nothing "happens," but it's the stuff i'd
-          actually miss.
+          new jersey is actually a surprisingly good place for this. people
+          forget how much industry this state used to hold. there's a lot of
+          history quietly falling apart out there if you know where to look.
         </p>
-        <p>
-          i have this constant pull to go see things. not tourist destinations —
-          just places. a road i haven't driven. a part of a city i've never
-          walked through. i don't even need a reason. the point is just to go
-          and be somewhere i haven't been, and let whatever's there surprise me.
-        </p>
-      </div>
-    </section>
 
-    <!-- Section 4: The Quiet Part -->
-    <section class="about-section" aria-label="Skills and tools">
-      <div class="about-section__header">
-        <span class="about-section__icon" aria-hidden="true"><Terminal /></span>
-        <h2 class="about-section__title">
-          the same curiosity, different place
-        </h2>
-      </div>
-
-      <div class="about-divider" aria-hidden="true">
-        <span class="about-divider__line"></span>
-      </div>
-
-      <div class="about-section__body">
         <p>
-          there's a part of my life that's a lot less poetic and a lot more
-          "staring at a screen at 4am wondering why a function that worked five
-          minutes ago suddenly doesn't." i write code. have for years. i'm good
-          at it in the way where i don't really think about it anymore — it's
-          just how i build things.
-        </p>
-        <p>
-          and somewhere along the way, i got deep into the AI tooling side of
-          things. not the hype cycle, not the takes on twitter. the actual
-          practical stuff — using these tools to move faster, build better,
-          solve problems i wouldn't have had the bandwidth for otherwise. it's
-          changed how i work more than anything else in the last few years.
+          aviation is the other one, and it's completely different in every way
+          except that it also makes me feel like the world has edges. like
+          things are containable. there's a moment right after takeoff where the
+          wheels leave the ground, the noise changes, and everything below you
+          gets small really fast. i've never found anything else that resets my
+          brain quite like that.
         </p>
 
         <div class="about-inline-quote">
           <p>
-            but that's just what i do. it's not who i am. if you took the code
-            away, i'd still be the same person staring at airplanes and
-            exploring abandoned buildings.
+            i can sit at a window seat and watch approach patterns for hours and
+            not get bored. the way a plane turns final, lines up with a runway
+            from miles away, and just commits — there's something incredibly
+            deliberate about it. i find that calming in a way that's hard to
+            articulate.
           </p>
         </div>
 
         <p>
-          i think the reason i even mention it is because it connects to
-          everything else. the curiosity. the drive to understand systems —
-          whether that's a web stack, an emergency response protocol, or why a
-          building was left to rot. it's all the same muscle. i just want to
-          know how things work, and then i want to make them work better.
+          and then there's the emergency services thing, which is harder to even
+          call a hobby because it feels more like a permanent part of how my
+          brain works. whenever i hear sirens, i stop. i notice. i'm already
+          thinking about where they're headed, what happened, what's unfolding
+          right now for whoever's in that situation. a structure fire? a medical
+          call? someone just having the worst night of their life?
+        </p>
+
+        <div class="about-callout">
+          <span class="about-callout__bar" aria-hidden="true"></span>
+          <p class="about-callout__text">
+            there are people out there right now, at 3am, making split-second
+            decisions that change someone's entire future, and most of the world
+            is just asleep. i think about the weight of that a lot. the things
+            that happen while nobody's watching.
+          </p>
+        </div>
+
+        <p>
+          i also just like to go places. a road i haven't driven. a corner of a
+          city i've never walked through. i'll get in the car with no real plan
+          and see what's out there. growing up in jersey means you're an hour
+          from almost everything — the city, the shore, the pine barrens, the
+          mountains — so that habit got fed pretty well early on. i still can't
+          shake it.
+        </p>
+
+        <p>
+          and outside of all that: i love being around my friends. not doing
+          anything in particular — just existing in the same space. driving
+          around with the windows down. sitting in someone's kitchen at midnight
+          talking about something that doesn't matter at all. the kind of time
+          that never makes it into any story because nothing "happens" — but
+          it's the stuff i'd actually miss most.
         </p>
       </div>
     </section>
