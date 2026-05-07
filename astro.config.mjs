@@ -6,7 +6,12 @@ import { defineConfig, envField } from "astro/config";
 // https://astro.build/config
 export default defineConfig({
   site: "https://perish.ing",
-  adapter: cloudflare(),
+  adapter: cloudflare({
+    imageService: "passthrough",
+  }),
+  session: {
+    driver: "cookie",
+  },
   env: {
     schema: {
       DISCORD_WEBHOOK_URL: envField.string({
