@@ -1,6 +1,6 @@
 import { defineAction, ActionError } from "astro:actions";
 import { z } from "astro/zod";
-import { DISCORD_WEBHOOK_URL, TURNSTILE_SECRET_KEY } from "astro:env/server";
+import { getSecret } from "astro:env/server";
 
 const TURNSTILE_VERIFY_URL =
   "https://challenges.cloudflare.com/turnstile/v0/siteverify";
@@ -57,7 +57,7 @@ const extractIpAddress = (request: Request) => {
 
 const verifyTurnstile = async (token: string, ipAddress: string) => {
   const body = new FormData();
-  body.set("secret", TURNSTILE_SECRET_KEY);
+  body.set("secret", getSecret("TURNSTILE_SECRET_KEY") as string);
   body.set("response", token);
 
   if (ipAddress !== "Unknown") {
@@ -86,7 +86,10 @@ const sendDiscordWebhook = async (submission: {
   ipAddress: string;
   timestamp: string;
 }) => {
-  const response = await fetch(DISCORD_WEBHOOK_URL, {
+  const webhookUrl = getSecret("DISCORD_WEBHOOK_URL");
+  if (!webhookUrl) throw new Error("Missing DISCORD_WEBHOOK_URL secret.");
+
+  const response = await fetch(webhookUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

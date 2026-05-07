@@ -17,10 +17,12 @@ export default defineConfig({
       DISCORD_WEBHOOK_URL: envField.string({
         context: "server",
         access: "secret",
+        optional: true,
       }),
       TURNSTILE_SECRET_KEY: envField.string({
         context: "server",
         access: "secret",
+        optional: true,
       }),
       PUBLIC_TURNSTILE_SITE_KEY: envField.string({
         context: "client",
