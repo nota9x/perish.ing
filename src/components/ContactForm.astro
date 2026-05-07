@@ -1,5 +1,5 @@
 ---
-import { Send, CheckCheck, X } from "@lucide/astro";
+import { Send, Check, X } from "@lucide/astro";
 import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
 ---
 
@@ -22,8 +22,6 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
 
     <form
       class="contact-form"
-      action="/api/contact"
-      method="POST"
       novalidate
       data-contact-form
       data-site-key={PUBLIC_TURNSTILE_SITE_KEY}
@@ -43,7 +41,12 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
               maxlength="120"
               placeholder="your name"
             />
-            <span class="contact-form__field-error" data-field-error="name" role="alert" aria-live="polite" hidden></span>
+            <span
+              class="contact-form__field-error"
+              data-field-error="name"
+              role="alert"
+              aria-live="polite"
+              hidden></span>
           </label>
 
           <label class="contact-form__field">
@@ -56,7 +59,12 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
               maxlength="320"
               placeholder="optional@email.com"
             />
-            <span class="contact-form__field-error" data-field-error="email" role="alert" aria-live="polite" hidden></span>
+            <span
+              class="contact-form__field-error"
+              data-field-error="email"
+              role="alert"
+              aria-live="polite"
+              hidden></span>
           </label>
 
           <label class="contact-form__field contact-form__field--message">
@@ -70,7 +78,12 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
               rows="7"
               placeholder="what are you working on, or what do you need?"
             ></textarea>
-            <span class="contact-form__field-error" data-field-error="message" role="alert" aria-live="polite" hidden></span>
+            <span
+              class="contact-form__field-error"
+              data-field-error="message"
+              role="alert"
+              aria-live="polite"
+              hidden></span>
             <span
               class="contact-form__char-count"
               data-char-count
@@ -95,9 +108,18 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
             <span data-submit-label>send</span>
           </button>
           <div class="contact-form__status-group">
-            <span class="contact-form__spinner" data-spinner aria-hidden="true"></span>
-            <span class="contact-form__success-icon" data-success-icon aria-hidden="true"><CheckCheck /></span>
-            <span class="contact-form__error-icon" data-error-icon aria-hidden="true"><X /></span>
+            <span class="contact-form__spinner" data-spinner aria-hidden="true"
+            ></span>
+            <span
+              class="contact-form__success-icon"
+              data-success-icon
+              aria-hidden="true"><Check /></span
+            >
+            <span
+              class="contact-form__error-icon"
+              data-error-icon
+              aria-hidden="true"><X /></span
+            >
             <p
               class="contact-form__status"
               data-contact-status
@@ -113,6 +135,8 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
 </section>
 
 <script>
+  import { actions } from "astro:actions";
+
   type TurnstileInstance = {
     render: (
       container: HTMLElement,
@@ -232,7 +256,10 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
       errorIcon.dataset.active = state === "error" ? "true" : "false";
     }
     // Hide the spinner when transitioning to a terminal state
-    if (spinner && (state === "success" || state === "error" || state === "idle")) {
+    if (
+      spinner &&
+      (state === "success" || state === "error" || state === "idle")
+    ) {
       spinner.dataset.active = "false";
     }
   };
@@ -280,7 +307,11 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
     }
   };
 
-  const setFieldError = (form: HTMLFormElement, field: string, message: string) => {
+  const setFieldError = (
+    form: HTMLFormElement,
+    field: string,
+    message: string,
+  ) => {
     const el = form.querySelector<HTMLElement>(`[data-field-error="${field}"]`);
     if (!el) return;
     el.textContent = message;
@@ -454,7 +485,7 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
       return;
     }
 
-    // Read other fields directly from their inputs for the same reason.
+    // Read other fields directly from their inputs.
     const nameInput =
       form.querySelector<HTMLInputElement>('input[name="name"]');
     const emailInput = form.querySelector<HTMLInputElement>(
@@ -474,23 +505,11 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
     setStatus(form, "pending", "verifying you're human...");
 
     try {
-      const response = await fetch(form.action, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
+      const { data, error } = await actions.contact(payload);
 
-      const result = (await response.json().catch(() => ({}))) as {
-        error?: string;
-        message?: string;
-      };
-
-      if (!response.ok) {
+      if (error) {
         throw new Error(
-          result.error ?? "something went wrong. please try again.",
+          error.message ?? "something went wrong. please try again.",
         );
       }
 
@@ -500,7 +519,7 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
       setStatus(
         form,
         "success",
-        result.message ?? "sent! i'll get back to you soon.",
+        data.message ?? "sent! i'll get back to you soon.",
       );
     } catch (error) {
       setStatus(
@@ -580,9 +599,8 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
             resolve(resolvedToken);
           });
 
-          if (form.dataset.submitAttempted === "true") {
-            setStatus(form, "idle");
-          }
+          // Do not reset to idle here — if a submission is in progress,
+          // the spinner must stay visible until success/error is set.
         },
         "expired-callback": () => {
           tokenInput.value = "";
@@ -709,7 +727,8 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
         const textarea = form.querySelector<HTMLTextAreaElement>(
           'textarea[name="message"]',
         );
-        const nameInput = form.querySelector<HTMLInputElement>('input[name="name"]');
+        const nameInput =
+          form.querySelector<HTMLInputElement>('input[name="name"]');
 
         // Live validation: message field
         if (textarea) {
@@ -717,7 +736,11 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
             updateCharCount(form);
             const over = textarea.value.length > MESSAGE_MAX;
             if (over) {
-              setFieldError(form, "message", `message is too long (${textarea.value.length}/${MESSAGE_MAX}).`);
+              setFieldError(
+                form,
+                "message",
+                `message is too long (${textarea.value.length}/${MESSAGE_MAX}).`,
+              );
             } else {
               clearFieldError(form, "message");
             }
@@ -736,7 +759,9 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
         }
 
         // Live validation: email field
-        const emailInput = form.querySelector<HTMLInputElement>('input[name="email"]');
+        const emailInput = form.querySelector<HTMLInputElement>(
+          'input[name="email"]',
+        );
         if (emailInput) {
           emailInput.addEventListener("input", () => {
             const val = emailInput.value.trim();
@@ -763,10 +788,15 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
   };
 
   const syncSubmitButton = (form: HTMLFormElement) => {
-    const nameInput = form.querySelector<HTMLInputElement>('input[name="name"]');
-    const emailInput = form.querySelector<HTMLInputElement>('input[name="email"]');
-    const textarea = form.querySelector<HTMLTextAreaElement>('textarea[name="message"]');
-    const nameOk = !!(nameInput?.value.trim());
+    const nameInput =
+      form.querySelector<HTMLInputElement>('input[name="name"]');
+    const emailInput = form.querySelector<HTMLInputElement>(
+      'input[name="email"]',
+    );
+    const textarea = form.querySelector<HTMLTextAreaElement>(
+      'textarea[name="message"]',
+    );
+    const nameOk = !!nameInput?.value.trim();
     const msgTrimLen = textarea?.value.trim().length ?? 0;
     const over = (textarea?.value.length ?? 0) > MESSAGE_MAX;
     const emailVal = (emailInput?.value ?? "").trim();
