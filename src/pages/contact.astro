@@ -1,36 +1,36 @@
 ---
-import { Mail, MessageSquare } from "@lucide/astro";
-import { slide } from "astro:transitions";
-import BackRow from "../components/BackRow.astro";
-import ContactForm from "../components/ContactForm.astro";
-import Layout from "../layouts/Layout.astro";
-import NavRow from "../components/NavRow.astro";
-import { siteConfig } from "../data/site";
+import { Mail, MessageSquare } from '@lucide/astro';
+import { slide } from 'astro:transitions';
+import BackRow from '../components/BackRow.astro';
+import ContactForm from '../components/ContactForm.astro';
+import Layout from '../layouts/Layout.astro';
+import NavRow from '../components/NavRow.astro';
+import { siteConfig } from '../data/site';
 
 export const prerender = true;
 
 const structuredData = [
   {
-    "@type": "ContactPoint",
-    "@id": `${siteConfig.url}/contact/#contact-point`,
+    '@type': 'ContactPoint',
+    '@id': `${siteConfig.url}/contact/#contact-point`,
     email: siteConfig.email,
     url: `${siteConfig.url}/contact/`,
-    contactType: "customer support",
-    availableLanguage: ["en"],
+    contactType: 'personal contact',
+    availableLanguage: ['en'],
   },
 ];
 ---
 
 <Layout
   title="contact | a9x"
-  description="Contact a9x by email or Discord about web design, full-stack development, managed hosting, and infrastructure support."
+  description="Contact a9x by email or Discord."
   pageType="ContactPage"
   structuredData={structuredData}
 >
   <article
     class="page page--interior"
     transition:name="page"
-    transition:animate={slide({ duration: "0.28s" })}
+    transition:animate={slide({ duration: '0.28s' })}
     tabindex="-1"
     data-page
   >
@@ -44,9 +44,7 @@ const structuredData = [
     <section class="contact-layout" aria-label="Contact methods">
       <div class="contact-intro">
         <p class="contact-intro__label">direct</p>
-        <p class="contact-intro__text">
-          a few simple ways to reach me without digging around.
-        </p>
+        <p class="contact-intro__text">here's where i'll actually see it.</p>
       </div>
 
       <div class="contact-panel">

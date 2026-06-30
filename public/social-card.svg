@@ -1,18 +1,79 @@
-<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1200" height="630" rx="32" fill="#161311"/>
-  <rect x="38" y="38" width="1124" height="554" rx="24" fill="url(#bg)"/>
-  <circle cx="1032" cy="146" r="162" fill="#B2794A" fill-opacity="0.18"/>
-  <circle cx="202" cy="520" r="210" fill="#F2E6D2" fill-opacity="0.08"/>
-  <path d="M99 470C210 388 323 342 449 332C601 320 701 363 844 332C920 316 995 282 1101 215" stroke="#F2E6D2" stroke-opacity="0.22" stroke-width="2"/>
-  <text x="98" y="153" fill="#F2E6D2" font-family="Bitter, Georgia, serif" font-size="42" letter-spacing="0.24em">perish.ing</text>
-  <text x="96" y="292" fill="#FFF7EC" font-family="Bitter, Georgia, serif" font-size="112" font-weight="700">a9x</text>
-  <text x="100" y="370" fill="#E6D4C0" font-family="Bitter, Georgia, serif" font-size="40">web design, full-stack development,</text>
-  <text x="100" y="424" fill="#E6D4C0" font-family="Bitter, Georgia, serif" font-size="40">and managed hosting that feels stable.</text>
-  <text x="100" y="534" fill="#BFA68A" font-family="Bitter, Georgia, serif" font-size="28" letter-spacing="0.12em">fast sites  reliable infrastructure  thoughtful builds</text>
+<svg
+  width="1200"
+  height="630"
+  viewBox="0 0 1200 630"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <style>
+    @font-face {
+      font-family: 'Bitter Social';
+      font-style: normal;
+      font-weight: 100 900;
+      src: url('bitter-social.woff2') format('woff2-variations');
+    }
+
+    text {
+      font-family: 'Bitter Social', 'Bitter Variable', Bitter, Georgia, serif;
+      font-feature-settings:
+        'liga' 1,
+        'kern' 1;
+      text-rendering: geometricPrecision;
+    }
+  </style>
+
+  <rect width="1200" height="630" rx="32" fill="#161311" />
+  <rect x="38" y="38" width="1124" height="554" rx="24" fill="url(#bg)" />
+  <circle cx="1032" cy="146" r="162" fill="#B2794A" fill-opacity="0.16" />
+  <circle cx="202" cy="520" r="210" fill="#F2E6D2" fill-opacity="0.07" />
+  <path
+    d="M99 486C210 404 323 358 449 348C601 336 701 379 844 348C920 332 995 298 1101 231"
+    stroke="#F2E6D2"
+    stroke-opacity="0.18"
+    stroke-width="2"
+  />
+  <text
+    x="98"
+    y="150"
+    fill="#BFA68A"
+    font-size="34"
+    font-variation-settings="'wght' 360"
+    letter-spacing="0.035em"
+  >
+    we.are.slowly.perish.ing
+  </text>
+  <g
+    fill="#FFF7EC"
+    font-size="164"
+    font-variation-settings="'wght' 900"
+    stroke="#FFF7EC"
+    stroke-width="1.8"
+    paint-order="stroke fill"
+  >
+    <text x="94" y="318">a</text>
+    <text x="184" y="301">9</text>
+    <text x="288" y="318">x</text>
+  </g>
+  <text x="100" y="402" fill="#E6D4C0" font-size="39" font-variation-settings="'wght' 360">
+    a little about me, some photos,
+  </text>
+  <text x="100" y="456" fill="#E6D4C0" font-size="39" font-variation-settings="'wght' 360">
+    and a place to say hi.
+  </text>
+  <text
+    x="100"
+    y="538"
+    fill="#BFA68A"
+    font-size="27"
+    font-variation-settings="'wght' 360"
+    letter-spacing="0.035em"
+  >
+    about / photos / contact
+  </text>
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#241D18"/>
-      <stop offset="1" stop-color="#120F0D"/>
+    <linearGradient id="bg" x1="38" y1="38" x2="1162" y2="592" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#241D18" />
+      <stop offset="1" stop-color="#120F0D" />
     </linearGradient>
   </defs>
 </svg>

@@ -1,24 +1,18 @@
 ---
-import { Send, Check, X } from "@lucide/astro";
-import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
+import { Send, Check, X } from '@lucide/astro';
+import { PUBLIC_TURNSTILE_SITE_KEY } from 'astro:env/client';
 ---
 
-<section
-  class="contact-layout contact-form-section"
-  aria-labelledby="contact-form-title"
->
+<section class="contact-layout contact-form-section" aria-labelledby="contact-form-title">
   <div class="contact-intro">
     <p class="contact-intro__label">contact form</p>
     <p class="contact-intro__text">
-      send a note here if you need anything. make sure you have a way i can get
-      back to you.
+      send a note here if you need anything. make sure you have a way i can get back to you.
     </p>
   </div>
 
   <div class="contact-panel contact-form-panel">
-    <p class="contact-panel__note" id="contact-form-title">
-      name and message are required
-    </p>
+    <p class="contact-panel__note" id="contact-form-title">name and message are required</p>
 
     <form
       class="contact-form"
@@ -76,27 +70,18 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
               class="contact-form__textarea"
               name="message"
               rows="7"
-              placeholder="what are you working on, or what do you need?"
-            ></textarea>
+              placeholder="what are you working on, or what do you need?"></textarea>
             <span
               class="contact-form__field-error"
               data-field-error="message"
               role="alert"
               aria-live="polite"
               hidden></span>
-            <span
-              class="contact-form__char-count"
-              data-char-count
-              aria-live="polite"></span>
+            <span class="contact-form__char-count" data-char-count aria-live="polite"></span>
           </label>
         </div>
 
-        <input
-          type="hidden"
-          name="turnstileToken"
-          value=""
-          data-turnstile-token
-        />
+        <input type="hidden" name="turnstileToken" value="" data-turnstile-token />
 
         <div class="contact-form__turnstile" data-turnstile-slot></div>
 
@@ -108,25 +93,12 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
             <span data-submit-label>send</span>
           </button>
           <div class="contact-form__status-group">
-            <span class="contact-form__spinner" data-spinner aria-hidden="true"
-            ></span>
-            <span
-              class="contact-form__success-icon"
-              data-success-icon
-              aria-hidden="true"><Check /></span
+            <span class="contact-form__spinner" data-spinner aria-hidden="true"></span>
+            <span class="contact-form__success-icon" data-success-icon aria-hidden="true"
+              ><Check /></span
             >
-            <span
-              class="contact-form__error-icon"
-              data-error-icon
-              aria-hidden="true"><X /></span
-            >
-            <p
-              class="contact-form__status"
-              data-contact-status
-              data-state="idle"
-              hidden
-            >
-            </p>
+            <span class="contact-form__error-icon" data-error-icon aria-hidden="true"><X /></span>
+            <p class="contact-form__status" data-contact-status data-state="idle" hidden></p>
           </div>
         </div>
       </fieldset>
@@ -135,20 +107,20 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
 </section>
 
 <script>
-  import { actions } from "astro:actions";
+  import { actions } from 'astro:actions';
 
   type TurnstileInstance = {
     render: (
       container: HTMLElement,
       options: {
         sitekey: string;
-        theme?: "auto" | "light" | "dark";
-        execution?: "render" | "execute";
-        appearance?: "always" | "execute" | "interaction-only";
+        theme?: 'auto' | 'light' | 'dark';
+        execution?: 'render' | 'execute';
+        appearance?: 'always' | 'execute' | 'interaction-only';
         callback?: (token: string) => void;
-        "expired-callback"?: () => void;
-        "error-callback"?: () => void;
-      },
+        'expired-callback'?: () => void;
+        'error-callback'?: () => void;
+      }
     ) => string;
     execute: (target: HTMLElement | string) => void;
     getResponse: (widgetId?: string) => string;
@@ -163,10 +135,10 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
   };
 
   const contactFormWindow = window as ContactFormWindow;
-  const turnstileScriptId = "cf-turnstile-script";
+  const turnstileScriptId = 'cf-turnstile-script';
   const turnstileScriptSrc =
-    "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
-  type ContactFormState = "idle" | "pending" | "success" | "error";
+    'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+  type ContactFormState = 'idle' | 'pending' | 'success' | 'error';
   const turnstileRequestTimeoutMs = 12000;
   const pendingTurnstileRequests = new WeakMap<
     HTMLFormElement,
@@ -182,9 +154,8 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
   // --- Character counter & validation ---
 
   const getMessageValidationError = (value: string): string | null => {
-    if (value.trim().length === 0) return "this field is required.";
-    if (value.length > MESSAGE_MAX)
-      return `message is too long (${value.length}/${MESSAGE_MAX}).`;
+    if (value.trim().length === 0) return 'this field is required.';
+    if (value.length > MESSAGE_MAX) return `message is too long (${value.length}/${MESSAGE_MAX}).`;
     return null;
   };
 
@@ -193,52 +164,41 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
   };
 
   const updateCharCount = (form: HTMLFormElement) => {
-    const textarea = form.querySelector<HTMLTextAreaElement>(
-      'textarea[name="message"]',
-    );
-    const counter = form.querySelector<HTMLElement>("[data-char-count]");
+    const textarea = form.querySelector<HTMLTextAreaElement>('textarea[name="message"]');
+    const counter = form.querySelector<HTMLElement>('[data-char-count]');
     if (!textarea || !counter) return;
 
     const len = textarea.value.length;
     const over = len > MESSAGE_MAX;
     counter.textContent = `${len} / ${MESSAGE_MAX}`;
-    counter.dataset.over = over ? "true" : "false";
+    counter.dataset.over = over ? 'true' : 'false';
   };
 
   const validateForm = (form: HTMLFormElement): string | null => {
-    const nameInput =
-      form.querySelector<HTMLInputElement>('input[name="name"]');
-    const emailInput = form.querySelector<HTMLInputElement>(
-      'input[name="email"]',
-    );
-    const messageInput = form.querySelector<HTMLTextAreaElement>(
-      'textarea[name="message"]',
-    );
+    const nameInput = form.querySelector<HTMLInputElement>('input[name="name"]');
+    const emailInput = form.querySelector<HTMLInputElement>('input[name="email"]');
+    const messageInput = form.querySelector<HTMLTextAreaElement>('textarea[name="message"]');
 
     if (!nameInput?.value.trim()) {
-      return "name";
+      return 'name';
     }
 
-    const emailVal = (emailInput?.value ?? "").trim();
+    const emailVal = (emailInput?.value ?? '').trim();
     if (emailVal && !isValidEmail(emailVal)) {
-      return "email";
+      return 'email';
     }
 
-    const msgError = getMessageValidationError(messageInput?.value ?? "");
+    const msgError = getMessageValidationError(messageInput?.value ?? '');
     if (msgError) return msgError;
 
     return null;
   };
 
-  const setStatus = (
-    form: HTMLFormElement,
-    state: ContactFormState,
-    message = "",
-  ) => {
-    const status = form.querySelector<HTMLElement>("[data-contact-status]");
-    const spinner = form.querySelector<HTMLElement>("[data-spinner]");
-    const successIcon = form.querySelector<HTMLElement>("[data-success-icon]");
-    const errorIcon = form.querySelector<HTMLElement>("[data-error-icon]");
+  const setStatus = (form: HTMLFormElement, state: ContactFormState, message = '') => {
+    const status = form.querySelector<HTMLElement>('[data-contact-status]');
+    const spinner = form.querySelector<HTMLElement>('[data-spinner]');
+    const successIcon = form.querySelector<HTMLElement>('[data-success-icon]');
+    const errorIcon = form.querySelector<HTMLElement>('[data-error-icon]');
 
     if (!status) {
       return;
@@ -246,34 +206,27 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
 
     status.dataset.state = state;
     status.textContent = message;
-    status.hidden = state === "idle" || message.length === 0;
+    status.hidden = state === 'idle' || message.length === 0;
 
     // Show checkmark on success; Show X on error; clear on anything else
     if (successIcon) {
-      successIcon.dataset.active = state === "success" ? "true" : "false";
+      successIcon.dataset.active = state === 'success' ? 'true' : 'false';
     }
     if (errorIcon) {
-      errorIcon.dataset.active = state === "error" ? "true" : "false";
+      errorIcon.dataset.active = state === 'error' ? 'true' : 'false';
     }
     // Hide the spinner when transitioning to a terminal state
-    if (
-      spinner &&
-      (state === "success" || state === "error" || state === "idle")
-    ) {
-      spinner.dataset.active = "false";
+    if (spinner && (state === 'success' || state === 'error' || state === 'idle')) {
+      spinner.dataset.active = 'false';
     }
   };
 
   const setSubmittingState = (form: HTMLFormElement, isSubmitting: boolean) => {
-    const fieldset = form.querySelector<HTMLFieldSetElement>(
-      "[data-form-fieldset]",
-    );
-    const submitButton = form.querySelector<HTMLButtonElement>(
-      "[data-submit-button]",
-    );
-    const spinner = form.querySelector<HTMLElement>("[data-spinner]");
-    const successIcon = form.querySelector<HTMLElement>("[data-success-icon]");
-    const errorIcon = form.querySelector<HTMLElement>("[data-error-icon]");
+    const fieldset = form.querySelector<HTMLFieldSetElement>('[data-form-fieldset]');
+    const submitButton = form.querySelector<HTMLButtonElement>('[data-submit-button]');
+    const spinner = form.querySelector<HTMLElement>('[data-spinner]');
+    const successIcon = form.querySelector<HTMLElement>('[data-success-icon]');
+    const errorIcon = form.querySelector<HTMLElement>('[data-error-icon]');
 
     if (fieldset) {
       fieldset.disabled = isSubmitting;
@@ -281,57 +234,51 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
 
     if (submitButton) {
       submitButton.disabled = isSubmitting;
-      submitButton.dataset.loading = isSubmitting ? "true" : "false";
+      submitButton.dataset.loading = isSubmitting ? 'true' : 'false';
     }
 
     if (spinner) {
-      spinner.dataset.active = isSubmitting ? "true" : "false";
+      spinner.dataset.active = isSubmitting ? 'true' : 'false';
     }
 
     // Always hide result icons while submitting
     if (successIcon && isSubmitting) {
-      successIcon.dataset.active = "false";
+      successIcon.dataset.active = 'false';
     }
     if (errorIcon && isSubmitting) {
-      errorIcon.dataset.active = "false";
+      errorIcon.dataset.active = 'false';
     }
   };
 
   const setButtonDisabled = (form: HTMLFormElement, disabled: boolean) => {
-    const submitButton = form.querySelector<HTMLButtonElement>(
-      "[data-submit-button]",
-    );
+    const submitButton = form.querySelector<HTMLButtonElement>('[data-submit-button]');
     if (submitButton) {
       submitButton.disabled = disabled;
-      submitButton.dataset.validationDisabled = disabled ? "true" : "false";
+      submitButton.dataset.validationDisabled = disabled ? 'true' : 'false';
     }
   };
 
-  const setFieldError = (
-    form: HTMLFormElement,
-    field: string,
-    message: string,
-  ) => {
+  const setFieldError = (form: HTMLFormElement, field: string, message: string) => {
     const el = form.querySelector<HTMLElement>(`[data-field-error="${field}"]`);
     if (!el) return;
     el.textContent = message;
     el.hidden = false;
     // Highlight the associated input/textarea
     const input = form.querySelector<HTMLElement>(`[name="${field}"]`);
-    input?.setAttribute("data-invalid", "true");
+    input?.setAttribute('data-invalid', 'true');
   };
 
   const clearFieldError = (form: HTMLFormElement, field: string) => {
     const el = form.querySelector<HTMLElement>(`[data-field-error="${field}"]`);
     if (!el) return;
-    el.textContent = "";
+    el.textContent = '';
     el.hidden = true;
     const input = form.querySelector<HTMLElement>(`[name="${field}"]`);
-    input?.removeAttribute("data-invalid");
+    input?.removeAttribute('data-invalid');
   };
 
   const clearAllFieldErrors = (form: HTMLFormElement) => {
-    for (const field of ["name", "email", "message"]) {
+    for (const field of ['name', 'email', 'message']) {
       clearFieldError(form, field);
     }
   };
@@ -342,63 +289,57 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
     }
 
     if (!contactFormWindow.__turnstileLoader) {
-      contactFormWindow.__turnstileLoader = new Promise<TurnstileInstance>(
-        (resolve, reject) => {
-          const createScript = () => {
-            const script = document.createElement("script");
-            script.id = turnstileScriptId;
-            script.dataset.loadState = "loading";
-            script.src = turnstileScriptSrc;
-            script.async = true;
-            script.defer = true;
-            script.addEventListener("load", onReady, { once: true });
-            script.addEventListener("error", onError, { once: true });
-            document.head.append(script);
-          };
+      contactFormWindow.__turnstileLoader = new Promise<TurnstileInstance>((resolve, reject) => {
+        const createScript = () => {
+          const script = document.createElement('script');
+          script.id = turnstileScriptId;
+          script.dataset.loadState = 'loading';
+          script.src = turnstileScriptSrc;
+          script.async = true;
+          script.defer = true;
+          script.addEventListener('load', onReady, { once: true });
+          script.addEventListener('error', onError, { once: true });
+          document.head.append(script);
+        };
 
-          const onReady = () => {
-            document
-              .getElementById(turnstileScriptId)
-              ?.setAttribute("data-load-state", "loaded");
+        const onReady = () => {
+          document.getElementById(turnstileScriptId)?.setAttribute('data-load-state', 'loaded');
 
-            if (contactFormWindow.turnstile) {
-              resolve(contactFormWindow.turnstile);
-              return;
-            }
-
-            contactFormWindow.__turnstileLoader = undefined;
-            document.getElementById(turnstileScriptId)?.remove();
-            reject(new Error("Turnstile did not initialize correctly."));
-          };
-
-          const onError = () => {
-            document
-              .getElementById(turnstileScriptId)
-              ?.setAttribute("data-load-state", "error");
-            contactFormWindow.__turnstileLoader = undefined;
-            document.getElementById(turnstileScriptId)?.remove();
-            reject(new Error("Turnstile failed to load."));
-          };
-
-          const existingScript = document.getElementById(
-            turnstileScriptId,
-          ) as HTMLScriptElement | null;
-
-          if (existingScript) {
-            if (existingScript.dataset.loadState === "error") {
-              existingScript.remove();
-              createScript();
-              return;
-            }
-
-            existingScript.addEventListener("load", onReady, { once: true });
-            existingScript.addEventListener("error", onError, { once: true });
+          if (contactFormWindow.turnstile) {
+            resolve(contactFormWindow.turnstile);
             return;
           }
 
-          createScript();
-        },
-      );
+          contactFormWindow.__turnstileLoader = undefined;
+          document.getElementById(turnstileScriptId)?.remove();
+          reject(new Error('Turnstile did not initialize correctly.'));
+        };
+
+        const onError = () => {
+          document.getElementById(turnstileScriptId)?.setAttribute('data-load-state', 'error');
+          contactFormWindow.__turnstileLoader = undefined;
+          document.getElementById(turnstileScriptId)?.remove();
+          reject(new Error('Turnstile failed to load.'));
+        };
+
+        const existingScript = document.getElementById(
+          turnstileScriptId
+        ) as HTMLScriptElement | null;
+
+        if (existingScript) {
+          if (existingScript.dataset.loadState === 'error') {
+            existingScript.remove();
+            createScript();
+            return;
+          }
+
+          existingScript.addEventListener('load', onReady, { once: true });
+          existingScript.addEventListener('error', onError, { once: true });
+          return;
+        }
+
+        createScript();
+      });
     }
 
     return contactFormWindow.__turnstileLoader;
@@ -410,7 +351,7 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
       resolve: (token: string) => void;
       reject: (error: Error) => void;
       timeoutId: number;
-    }) => void,
+    }) => void
   ) => {
     const pendingRequest = pendingTurnstileRequests.get(form);
 
@@ -424,9 +365,7 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
   };
 
   const requestTurnstileToken = async (form: HTMLFormElement) => {
-    const tokenInput = form.querySelector<HTMLInputElement>(
-      "[data-turnstile-token]",
-    );
+    const tokenInput = form.querySelector<HTMLInputElement>('[data-turnstile-token]');
     const widgetId = form.dataset.turnstileWidgetId;
     const turnstile = contactFormWindow.turnstile;
 
@@ -434,14 +373,14 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
       throw new Error("couldn't prepare verification. refresh and retry.");
     }
 
-    tokenInput.value = "";
+    tokenInput.value = '';
     turnstile.reset(widgetId);
-    form.dataset.turnstileAwaiting = "true";
+    form.dataset.turnstileAwaiting = 'true';
 
     const tokenPromise = new Promise<string>((resolve, reject) => {
       const timeoutId = window.setTimeout(() => {
         pendingTurnstileRequests.delete(form);
-        reject(new Error("verification timed out. try sending again."));
+        reject(new Error('verification timed out. try sending again.'));
       }, turnstileRequestTimeoutMs);
 
       pendingTurnstileRequests.set(form, { resolve, reject, timeoutId });
@@ -453,101 +392,79 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
     } catch (error) {
       settlePendingTurnstileRequest(form, ({ reject }) => {
         reject(
-          error instanceof Error
-            ? error
-            : new Error("couldn't start verification. try again."),
+          error instanceof Error ? error : new Error("couldn't start verification. try again.")
         );
       });
       throw error;
     }
   };
 
-  const submitContactForm = async (
-    form: HTMLFormElement,
-    turnstileTokenFromChallenge?: string,
-  ) => {
-    const tokenInput = form.querySelector<HTMLInputElement>(
-      "[data-turnstile-token]",
-    );
+  const submitContactForm = async (form: HTMLFormElement, turnstileTokenFromChallenge?: string) => {
+    const tokenInput = form.querySelector<HTMLInputElement>('[data-turnstile-token]');
     const widgetId = form.dataset.turnstileWidgetId;
     const turnstile = contactFormWindow.turnstile;
     const turnstileToken = (
       turnstileTokenFromChallenge ??
       turnstile?.getResponse(widgetId) ??
       tokenInput?.value ??
-      ""
+      ''
     ).trim();
 
     if (!turnstileToken) {
-      form.dataset.turnstileAwaiting = "false";
+      form.dataset.turnstileAwaiting = 'false';
       setSubmittingState(form, false);
-      setStatus(form, "error", "verification incomplete. try again.");
+      setStatus(form, 'error', 'verification incomplete. try again.');
       return;
     }
 
     // Read other fields directly from their inputs.
-    const nameInput =
-      form.querySelector<HTMLInputElement>('input[name="name"]');
-    const emailInput = form.querySelector<HTMLInputElement>(
-      'input[name="email"]',
-    );
-    const messageInput = form.querySelector<HTMLTextAreaElement>(
-      'textarea[name="message"]',
-    );
+    const nameInput = form.querySelector<HTMLInputElement>('input[name="name"]');
+    const emailInput = form.querySelector<HTMLInputElement>('input[name="email"]');
+    const messageInput = form.querySelector<HTMLTextAreaElement>('textarea[name="message"]');
 
     const payload = {
-      name: (nameInput?.value ?? "").trim(),
-      email: (emailInput?.value ?? "").trim(),
-      message: (messageInput?.value ?? "").trim(),
+      name: (nameInput?.value ?? '').trim(),
+      email: (emailInput?.value ?? '').trim(),
+      message: (messageInput?.value ?? '').trim(),
       turnstileToken,
     };
 
-    setStatus(form, "pending", "verifying you're human...");
+    setStatus(form, 'pending', "verifying you're human...");
 
     try {
       const { data, error } = await actions.contact(payload);
 
       if (error) {
-        throw new Error(
-          error.message ?? "something went wrong. please try again.",
-        );
+        throw new Error(error.message ?? 'something went wrong. please try again.');
       }
 
       form.reset();
-      form.dataset.submitAttempted = "false";
+      form.dataset.submitAttempted = 'false';
       updateCharCount(form);
-      setStatus(
-        form,
-        "success",
-        data.message ?? "sent! i'll get back to you soon.",
-      );
+      setStatus(form, 'success', data.message ?? "sent! i'll get back to you soon.");
     } catch (error) {
       setStatus(
         form,
-        "error",
-        error instanceof Error
-          ? error.message
-          : "something went wrong. please try again.",
+        'error',
+        error instanceof Error ? error.message : 'something went wrong. please try again.'
       );
     } finally {
-      form.dataset.turnstileAwaiting = "false";
+      form.dataset.turnstileAwaiting = 'false';
       resetTurnstile(form);
       setSubmittingState(form, false);
     }
   };
 
   const resetTurnstile = (form: HTMLFormElement) => {
-    const tokenInput = form.querySelector<HTMLInputElement>(
-      "[data-turnstile-token]",
-    );
+    const tokenInput = form.querySelector<HTMLInputElement>('[data-turnstile-token]');
     const widgetId = form.dataset.turnstileWidgetId;
 
     if (tokenInput) {
-      tokenInput.value = "";
+      tokenInput.value = '';
     }
 
     settlePendingTurnstileRequest(form, ({ reject }) => {
-      reject(new Error("verification was interrupted. try again."));
+      reject(new Error('verification was interrupted. try again.'));
     });
 
     if (contactFormWindow.turnstile && widgetId) {
@@ -556,22 +473,16 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
   };
 
   const renderTurnstile = async (form: HTMLFormElement) => {
-    if (form.dataset.turnstileRendered === "true") {
+    if (form.dataset.turnstileRendered === 'true') {
       return true;
     }
 
-    const slot = form.querySelector<HTMLElement>("[data-turnstile-slot]");
-    const tokenInput = form.querySelector<HTMLInputElement>(
-      "[data-turnstile-token]",
-    );
+    const slot = form.querySelector<HTMLElement>('[data-turnstile-slot]');
+    const tokenInput = form.querySelector<HTMLInputElement>('[data-turnstile-token]');
     const siteKey = form.dataset.siteKey?.trim();
 
     if (!slot || !tokenInput || !siteKey) {
-      setStatus(
-        form,
-        "error",
-        "couldn't prepare verification. refresh and retry.",
-      );
+      setStatus(form, 'error', "couldn't prepare verification. refresh and retry.");
       return false;
     }
 
@@ -579,20 +490,16 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
       const turnstile = await getTurnstileLoader();
       const widgetId = turnstile.render(slot, {
         sitekey: siteKey,
-        theme: "dark",
-        execution: "execute",
-        appearance: "interaction-only",
+        theme: 'dark',
+        execution: 'execute',
+        appearance: 'interaction-only',
         callback: (token) => {
-          const resolvedToken = (
-            token ||
-            turnstile.getResponse(widgetId) ||
-            ""
-          ).trim();
+          const resolvedToken = (token || turnstile.getResponse(widgetId) || '').trim();
           tokenInput.value = resolvedToken;
-          form.dataset.turnstileAwaiting = "false";
+          form.dataset.turnstileAwaiting = 'false';
           settlePendingTurnstileRequest(form, ({ resolve, reject }) => {
             if (!resolvedToken) {
-              reject(new Error("verification incomplete. try again."));
+              reject(new Error('verification incomplete. try again.'));
               return;
             }
 
@@ -602,48 +509,34 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
           // Do not reset to idle here — if a submission is in progress,
           // the spinner must stay visible until success/error is set.
         },
-        "expired-callback": () => {
-          tokenInput.value = "";
-          form.dataset.turnstileAwaiting = "false";
+        'expired-callback': () => {
+          tokenInput.value = '';
+          form.dataset.turnstileAwaiting = 'false';
           settlePendingTurnstileRequest(form, ({ reject }) => {
-            reject(new Error("verification expired. try sending again."));
+            reject(new Error('verification expired. try sending again.'));
           });
           setSubmittingState(form, false);
 
-          if (form.dataset.submitAttempted === "true") {
-            setStatus(
-              form,
-              "error",
-              "verification expired. try sending again.",
-            );
+          if (form.dataset.submitAttempted === 'true') {
+            setStatus(form, 'error', 'verification expired. try sending again.');
           }
         },
-        "error-callback": () => {
-          tokenInput.value = "";
-          form.dataset.turnstileAwaiting = "false";
+        'error-callback': () => {
+          tokenInput.value = '';
+          form.dataset.turnstileAwaiting = 'false';
           settlePendingTurnstileRequest(form, ({ reject }) => {
-            reject(
-              new Error("verification failed to load. refresh and retry."),
-            );
+            reject(new Error('verification failed to load. refresh and retry.'));
           });
           setSubmittingState(form, false);
-          setStatus(
-            form,
-            "error",
-            "verification failed to load. refresh and retry.",
-          );
+          setStatus(form, 'error', 'verification failed to load. refresh and retry.');
         },
       });
 
-      form.dataset.turnstileRendered = "true";
+      form.dataset.turnstileRendered = 'true';
       form.dataset.turnstileWidgetId = widgetId;
       return true;
     } catch {
-      setStatus(
-        form,
-        "error",
-        "verification failed to load. refresh and retry.",
-      );
+      setStatus(form, 'error', 'verification failed to load. refresh and retry.');
       return false;
     }
   };
@@ -662,34 +555,30 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
     const validationError = validateForm(target);
     if (validationError) {
       // Show error on the relevant field
-      if (validationError === "name") {
-        setFieldError(target, "name", "this field is required.");
-      } else if (validationError === "email") {
-        setFieldError(target, "email", "enter a valid email address.");
+      if (validationError === 'name') {
+        setFieldError(target, 'name', 'this field is required.');
+      } else if (validationError === 'email') {
+        setFieldError(target, 'email', 'enter a valid email address.');
       } else {
-        setFieldError(target, "message", validationError);
+        setFieldError(target, 'message', validationError);
       }
       return;
     }
 
-    target.dataset.submitAttempted = "true";
-    const slot = target.querySelector<HTMLElement>("[data-turnstile-slot]");
+    target.dataset.submitAttempted = 'true';
+    const slot = target.querySelector<HTMLElement>('[data-turnstile-slot]');
 
     if (!slot) {
-      setStatus(
-        target,
-        "error",
-        "couldn't prepare verification. refresh and try.",
-      );
+      setStatus(target, 'error', "couldn't prepare verification. refresh and try.");
       return;
     }
 
-    if (target.dataset.turnstileAwaiting === "true") {
+    if (target.dataset.turnstileAwaiting === 'true') {
       return;
     }
 
     setSubmittingState(target, true);
-    setStatus(target, "pending", "verifying you're human...");
+    setStatus(target, 'pending', "verifying you're human...");
 
     const isRendered = await renderTurnstile(target);
 
@@ -702,47 +591,40 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
       const turnstileToken = await requestTurnstileToken(target);
       await submitContactForm(target, turnstileToken);
     } catch (error) {
-      target.dataset.turnstileAwaiting = "false";
+      target.dataset.turnstileAwaiting = 'false';
       setSubmittingState(target, false);
       setStatus(
         target,
-        "error",
-        error instanceof Error
-          ? error.message
-          : "couldn't start verification. try again.",
+        'error',
+        error instanceof Error ? error.message : "couldn't start verification. try again."
       );
     }
   };
 
   const initializeContactForms = () => {
-    const forms = document.querySelectorAll<HTMLFormElement>(
-      "[data-contact-form]",
-    );
+    const forms = document.querySelectorAll<HTMLFormElement>('[data-contact-form]');
 
     for (const form of forms) {
-      if (form.dataset.contactFormReady !== "true") {
-        form.addEventListener("submit", handleSubmit);
+      if (form.dataset.contactFormReady !== 'true') {
+        form.addEventListener('submit', handleSubmit);
 
         // Live character counter + over-limit validation disable
-        const textarea = form.querySelector<HTMLTextAreaElement>(
-          'textarea[name="message"]',
-        );
-        const nameInput =
-          form.querySelector<HTMLInputElement>('input[name="name"]');
+        const textarea = form.querySelector<HTMLTextAreaElement>('textarea[name="message"]');
+        const nameInput = form.querySelector<HTMLInputElement>('input[name="name"]');
 
         // Live validation: message field
         if (textarea) {
-          textarea.addEventListener("input", () => {
+          textarea.addEventListener('input', () => {
             updateCharCount(form);
             const over = textarea.value.length > MESSAGE_MAX;
             if (over) {
               setFieldError(
                 form,
-                "message",
-                `message is too long (${textarea.value.length}/${MESSAGE_MAX}).`,
+                'message',
+                `message is too long (${textarea.value.length}/${MESSAGE_MAX}).`
               );
             } else {
-              clearFieldError(form, "message");
+              clearFieldError(form, 'message');
             }
             syncSubmitButton(form);
           });
@@ -750,35 +632,33 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
 
         // Live validation: name field
         if (nameInput) {
-          nameInput.addEventListener("input", () => {
+          nameInput.addEventListener('input', () => {
             if (nameInput.value.trim()) {
-              clearFieldError(form, "name");
+              clearFieldError(form, 'name');
             }
             syncSubmitButton(form);
           });
         }
 
         // Live validation: email field
-        const emailInput = form.querySelector<HTMLInputElement>(
-          'input[name="email"]',
-        );
+        const emailInput = form.querySelector<HTMLInputElement>('input[name="email"]');
         if (emailInput) {
-          emailInput.addEventListener("input", () => {
+          emailInput.addEventListener('input', () => {
             const val = emailInput.value.trim();
             if (!val || isValidEmail(val)) {
-              clearFieldError(form, "email");
+              clearFieldError(form, 'email');
             }
             syncSubmitButton(form);
           });
-          emailInput.addEventListener("blur", () => {
+          emailInput.addEventListener('blur', () => {
             const val = emailInput.value.trim();
             if (val && !isValidEmail(val)) {
-              setFieldError(form, "email", "enter a valid email address.");
+              setFieldError(form, 'email', 'enter a valid email address.');
             }
           });
         }
 
-        form.dataset.contactFormReady = "true";
+        form.dataset.contactFormReady = 'true';
       }
 
       updateCharCount(form);
@@ -788,18 +668,13 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
   };
 
   const syncSubmitButton = (form: HTMLFormElement) => {
-    const nameInput =
-      form.querySelector<HTMLInputElement>('input[name="name"]');
-    const emailInput = form.querySelector<HTMLInputElement>(
-      'input[name="email"]',
-    );
-    const textarea = form.querySelector<HTMLTextAreaElement>(
-      'textarea[name="message"]',
-    );
+    const nameInput = form.querySelector<HTMLInputElement>('input[name="name"]');
+    const emailInput = form.querySelector<HTMLInputElement>('input[name="email"]');
+    const textarea = form.querySelector<HTMLTextAreaElement>('textarea[name="message"]');
     const nameOk = !!nameInput?.value.trim();
     const msgTrimLen = textarea?.value.trim().length ?? 0;
     const over = (textarea?.value.length ?? 0) > MESSAGE_MAX;
-    const emailVal = (emailInput?.value ?? "").trim();
+    const emailVal = (emailInput?.value ?? '').trim();
     const emailBad = emailVal.length > 0 && !isValidEmail(emailVal);
     // Grey out if: name empty, message empty, message over limit, or email invalid
     const invalid = !nameOk || msgTrimLen === 0 || over || emailBad;
@@ -807,7 +682,7 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
   };
 
   if (!contactFormWindow.__contactFormBound) {
-    document.addEventListener("astro:page-load", initializeContactForms);
+    document.addEventListener('astro:page-load', initializeContactForms);
     contactFormWindow.__contactFormBound = true;
   }
 
@@ -849,7 +724,7 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
   .contact-form__label {
     color: color-mix(in srgb, var(--color-text) 88%, var(--color-muted));
     font-size: 0.94rem;
-    font-variation-settings: "wght" 600;
+    font-variation-settings: 'wght' 600;
     letter-spacing: 0.02em;
     text-transform: lowercase;
   }
@@ -907,9 +782,9 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
     margin-top: -0.15rem;
   }
 
-  .contact-form__char-count[data-over="true"] {
+  .contact-form__char-count[data-over='true'] {
     color: color-mix(in srgb, var(--color-text) 80%, #e7c0ad);
-    font-variation-settings: "wght" 600;
+    font-variation-settings: 'wght' 600;
   }
 
   .contact-form__turnstile {
@@ -949,14 +824,10 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
     padding: 0.9rem 1.25rem;
     border: 1px solid rgba(196, 113, 74, 0.38);
     border-radius: 999px;
-    background: linear-gradient(
-      135deg,
-      rgba(196, 113, 74, 0.22),
-      rgba(196, 113, 74, 0.1)
-    );
+    background: linear-gradient(135deg, rgba(196, 113, 74, 0.22), rgba(196, 113, 74, 0.1));
     color: var(--color-text);
     font-size: 0.96rem;
-    font-variation-settings: "wght" 700;
+    font-variation-settings: 'wght' 700;
     letter-spacing: 0.03em;
     text-transform: lowercase;
     cursor: pointer;
@@ -980,11 +851,7 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
   .contact-form__submit:hover,
   .contact-form__submit:focus-visible {
     border-color: rgba(196, 113, 74, 0.58);
-    background: linear-gradient(
-      135deg,
-      rgba(196, 113, 74, 0.28),
-      rgba(196, 113, 74, 0.14)
-    );
+    background: linear-gradient(135deg, rgba(196, 113, 74, 0.28), rgba(196, 113, 74, 0.14));
     transform: translateY(-1px);
   }
 
@@ -1001,7 +868,7 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
     font-size: 0.82rem;
     line-height: 1.4;
     color: color-mix(in srgb, var(--color-text) 85%, #e7c0ad);
-    font-variation-settings: "wght" 500;
+    font-variation-settings: 'wght' 500;
     letter-spacing: 0.01em;
     margin-top: 0.15rem;
   }
@@ -1021,7 +888,7 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
     color: color-mix(in srgb, var(--color-text) 80%, #b6d8b9);
   }
 
-  .contact-form__success-icon[data-active="true"] {
+  .contact-form__success-icon[data-active='true'] {
     display: inline-flex;
   }
 
@@ -1039,7 +906,7 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
     color: color-mix(in srgb, var(--color-text) 80%, #e7c0ad);
   }
 
-  .contact-form__error-icon[data-active="true"] {
+  .contact-form__error-icon[data-active='true'] {
     display: inline-flex;
   }
 
@@ -1068,15 +935,11 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
       transparent calc(100% - 2px),
       #000 calc(100% - 2px)
     );
-    mask: radial-gradient(
-      farthest-side,
-      transparent calc(100% - 2px),
-      #000 calc(100% - 2px)
-    );
+    mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px));
     animation: cf-spin 0.65s linear infinite;
   }
 
-  .contact-form__spinner[data-active="true"] {
+  .contact-form__spinner[data-active='true'] {
     display: inline-block;
   }
 
@@ -1098,15 +961,15 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
     transition: color var(--transition-fast);
   }
 
-  .contact-form__status[data-state="pending"] {
+  .contact-form__status[data-state='pending'] {
     color: color-mix(in srgb, var(--color-text) 60%, var(--color-muted));
   }
 
-  .contact-form__status[data-state="success"] {
+  .contact-form__status[data-state='success'] {
     color: color-mix(in srgb, var(--color-text) 80%, #b6d8b9);
   }
 
-  .contact-form__status[data-state="error"] {
+  .contact-form__status[data-state='error'] {
     color: color-mix(in srgb, var(--color-text) 80%, #e7c0ad);
   }
 

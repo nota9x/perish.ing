@@ -1,38 +1,34 @@
-import { defineAction, ActionError } from "astro:actions";
-import { z } from "astro/zod";
-import { getSecret } from "astro:env/server";
+import { defineAction, ActionError } from 'astro:actions';
+import { z } from 'astro/zod';
+import { getSecret } from 'astro:env/server';
 
-const TURNSTILE_VERIFY_URL =
-  "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// eslint-disable-next-line no-control-regex
 const CONTROL_CHARACTERS = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g;
 
 const sanitizeSingleLine = (value: string) =>
-  value
-    .normalize("NFKC")
-    .replace(CONTROL_CHARACTERS, "")
-    .replace(/\s+/g, " ")
-    .trim();
+  value.normalize('NFKC').replace(CONTROL_CHARACTERS, '').replace(/\s+/g, ' ').trim();
 
 const sanitizeMessage = (value: string) =>
   value
-    .normalize("NFKC")
-    .replace(CONTROL_CHARACTERS, "")
-    .replace(/\r\n/g, "\n")
-    .split("\n")
+    .normalize('NFKC')
+    .replace(CONTROL_CHARACTERS, '')
+    .replace(/\r\n/g, '\n')
+    .split('\n')
     .map((line) => line.trimEnd())
-    .join("\n")
-    .replace(/\n{3,}/g, "\n\n")
+    .join('\n')
+    .replace(/\n{3,}/g, '\n\n')
     .trim();
 
 const extractIpAddress = (request: Request) => {
   const headerNames = [
-    "cf-connecting-ip",
-    "x-forwarded-for",
-    "x-real-ip",
-    "true-client-ip",
-    "x-client-ip",
-    "fastly-client-ip",
+    'cf-connecting-ip',
+    'x-forwarded-for',
+    'x-real-ip',
+    'true-client-ip',
+    'x-client-ip',
+    'fastly-client-ip',
   ];
 
   for (const headerName of headerNames) {
@@ -42,30 +38,27 @@ const extractIpAddress = (request: Request) => {
       continue;
     }
 
-    const candidate = sanitizeSingleLine(headerValue.split(",")[0] ?? "").slice(
-      0,
-      120,
-    );
+    const candidate = sanitizeSingleLine(headerValue.split(',')[0] ?? '').slice(0, 120);
 
     if (candidate) {
       return candidate;
     }
   }
 
-  return "Unknown";
+  return 'Unknown';
 };
 
 const verifyTurnstile = async (token: string, ipAddress: string) => {
   const body = new FormData();
-  body.set("secret", getSecret("TURNSTILE_SECRET_KEY") as string);
-  body.set("response", token);
+  body.set('secret', getSecret('TURNSTILE_SECRET_KEY') as string);
+  body.set('response', token);
 
-  if (ipAddress !== "Unknown") {
-    body.set("remoteip", ipAddress);
+  if (ipAddress !== 'Unknown') {
+    body.set('remoteip', ipAddress);
   }
 
   const response = await fetch(TURNSTILE_VERIFY_URL, {
-    method: "POST",
+    method: 'POST',
     body,
   });
 
@@ -75,7 +68,7 @@ const verifyTurnstile = async (token: string, ipAddress: string) => {
 
   return (await response.json()) as {
     success?: boolean;
-    "error-codes"?: string[];
+    'error-codes'?: string[];
   };
 };
 
@@ -86,13 +79,13 @@ const sendDiscordWebhook = async (submission: {
   ipAddress: string;
   timestamp: string;
 }) => {
-  const webhookUrl = getSecret("DISCORD_WEBHOOK_URL");
-  if (!webhookUrl) throw new Error("Missing DISCORD_WEBHOOK_URL secret.");
+  const webhookUrl = getSecret('DISCORD_WEBHOOK_URL');
+  if (!webhookUrl) throw new Error('Missing DISCORD_WEBHOOK_URL secret.');
 
   const response = await fetch(webhookUrl, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       allowed_mentions: {
@@ -100,29 +93,29 @@ const sendDiscordWebhook = async (submission: {
       },
       embeds: [
         {
-          title: "📬 New Contact Form Submission",
+          title: '📬 New Contact Form Submission',
           description: submission.message,
           color: 0xc4714a,
           timestamp: submission.timestamp,
           fields: [
             {
-              name: "👤 Name",
+              name: '👤 Name',
               value: submission.name,
               inline: true,
             },
             {
-              name: "📧 Email",
-              value: submission.email || "*Not provided*",
+              name: '📧 Email',
+              value: submission.email || '*Not provided*',
               inline: true,
             },
             {
-              name: "🌐 IP Address",
+              name: '🌐 IP Address',
               value: `\`${submission.ipAddress}\``,
               inline: true,
             },
           ],
           footer: {
-            text: "perish.ing",
+            text: 'perish.ing',
           },
         },
       ],
@@ -137,17 +130,17 @@ const sendDiscordWebhook = async (submission: {
 export const server = {
   contact: defineAction({
     input: z.object({
-      name: z.string().min(1, "Name is required.").max(120),
+      name: z.string().min(1, 'Name is required.').max(120),
       email: z
         .string()
         .max(320)
-        .refine((val) => val === "" || EMAIL_PATTERN.test(val), {
-          message: "Please provide a valid email address.",
+        .refine((val) => val === '' || EMAIL_PATTERN.test(val), {
+          message: 'Please provide a valid email address.',
         })
         .optional()
-        .default(""),
-      message: z.string().min(1, "Message is required.").max(1500),
-      turnstileToken: z.string().min(1, "Verification token is required."),
+        .default(''),
+      message: z.string().min(1, 'Message is required.').max(1500),
+      turnstileToken: z.string().min(1, 'Verification token is required.'),
     }),
     handler: async (input, context) => {
       const name = sanitizeSingleLine(input.name);
@@ -158,15 +151,15 @@ export const server = {
 
       if (!name || !message) {
         throw new ActionError({
-          code: "BAD_REQUEST",
-          message: "Name and message are required.",
+          code: 'BAD_REQUEST',
+          message: 'Name and message are required.',
         });
       }
 
       if (!turnstileToken) {
         throw new ActionError({
-          code: "BAD_REQUEST",
-          message: "Please complete the verification challenge.",
+          code: 'BAD_REQUEST',
+          message: 'Please complete the verification challenge.',
         });
       }
 
@@ -176,18 +169,17 @@ export const server = {
 
         if (!verification.success) {
           throw new ActionError({
-            code: "FORBIDDEN",
-            message: "Verification failed. Please try again.",
+            code: 'FORBIDDEN',
+            message: 'Verification failed. Please try again.',
           });
         }
       } catch (error) {
         if (error instanceof ActionError) throw error;
 
-        console.error("Turnstile verification failed.", error);
+        console.error('Turnstile verification failed.', error);
         throw new ActionError({
-          code: "INTERNAL_SERVER_ERROR",
-          message:
-            "Verification service is unavailable right now. Please try again.",
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Verification service is unavailable right now. Please try again.',
         });
       }
 
@@ -203,11 +195,10 @@ export const server = {
           timestamp,
         });
       } catch (error) {
-        console.error("Discord webhook request failed.", error);
+        console.error('Discord webhook request failed.', error);
         throw new ActionError({
-          code: "INTERNAL_SERVER_ERROR",
-          message:
-            "Unable to send your message right now. Please try again later.",
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Unable to send your message right now. Please try again later.',
         });
       }
 

@@ -1,6 +1,21 @@
-# Ignore dependencies and generated artifacts:
+# Dependencies
 node_modules
+
+# Build outputs
 .astro
 dist
+build
 .wrangler
+
+# Git
+.git
+
+# Editor
 .vscode/
+
+# Package lock
+package-lock.json
+pnpm-lock.yaml
+
+# Downloads
+public/downloads
