@@ -1,7 +1,8 @@
 {
-  "name": "perish-ing",
+  "name": "perishing",
   "type": "module",
   "version": "0.0.1",
+  "packageManager": "pnpm@11.9.0",
   "engines": {
     "node": ">=22.12.0"
   },
