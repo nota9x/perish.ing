@@ -9,9 +9,7 @@ export default defineConfig({
   adapter: cloudflare({
     imageService: 'passthrough',
   }),
-  session: {
-    driver: 'cookie',
-  },
+  session: {},
   env: {
     schema: {
       DISCORD_WEBHOOK_URL: envField.string({
